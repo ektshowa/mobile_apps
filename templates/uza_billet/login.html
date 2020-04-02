@@ -21,9 +21,26 @@
         </style>
     </head>
     <body>
-        <div data-role="page" id="loginPage">
+        <div data-role="page" id="loginPage" class="a-page">
+            <div data-role="header" data-position="fixed">
+                <a href="{% url "index" %}" data-icon="carat-l">Retour</a> 
+                <h1>Uza Ticket</h1>
+                <a href="#" data-icon="info">Contact</a>
+            </div>
             <div role="main" class="ui-content">
-                <h1>TEST PAGE</h1>
+                <h2>Authentifiez-vous</h2>
+                <div data-role="fieldcontain">
+                    <label for="username">Nom d'Utilisateur:</label>
+                    <input type="text" name="username" id="username" value=""  />
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="password">Mot de Passe:</label>
+                    <input type="text" name="password" id="password" value=""  />
+                </div>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                
+                <h4>Copyright Uza-Ticket &copy; 2020</h4>
             </div>
         </div>
         
