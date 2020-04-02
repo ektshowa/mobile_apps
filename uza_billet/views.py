@@ -8,3 +8,9 @@ def index(request, template="uza_billet/index.html",
     context = {"title": "Uza Billet"}
     context.update(extra_context or {})
     return TemplateResponse(request, template, context)
+
+
+def login(request, template="uza_billet/login.html", extra_context=None):
+    context = {}
+    return TemplateResponse(request, template, context)
+

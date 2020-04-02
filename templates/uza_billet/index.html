@@ -1,29 +1,58 @@
 <!DOCTYPE html>
 <html>
+    {% load staticfiles %}
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Uza Billet Facile</title>
+        <link rel="stylesheet" href="{% static "themes/Bootstrap.css" %}">
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <link rel="stylesheet" href="{% static "themes/jquery.mobile.icons.min.css" %}">
         <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+        <style>
+            .centered {
+                text-align: center;
+            }
+            .a-page {
+                background-color: #d5e3d9;
+            }
+            
+        </style>
     </head>
     <body>
-        <div data-role="page" id="homePage">
+        <div data-role="page" id="homePage" class="a-page">
             <div data-role="header">
-                <h1>Welcome</h1>
+                <a href="index.html" data-icon="home">Home</a>
+                <h1>Uza Ticket</h1>
+                <a href="#" data-icon="info">Contact</a>
             </div>
             <div role="main" class="ui-content">
-                <p>
-                    Welcome to our first mobile web site. It's going to be the best
-                    site you've ever seen. Once we get some content. And a business
-                    plan. But the hard part is done!
-                </p>
-                <p>
+                <a href="{% url "login" %}" data-role="button" data-theme="e" data-icon="action">Connectez-Vous</a>
+                <div>
+                    <p class="centered">
+                        Vendez les tickets de votre &eacute;v&ecirc;nement ou achetez
+                        votre billet de participation &agrave; un &eacute;v&ecirc;nement
+                        en quelque clicks
+                    </p>
+                    <h3 class="centered">Creez un compte promoteur</h3>
+                    <div class="ui-grid-a ui-responsive">
+                        <div class="ui-block-a"><a href="#" data-role="button" data-theme="d" data-icon="user">Compte Organization</a></div>
+                        <div class="ui-block-b"><a href="#" data-role="button" data-theme="d" data-icon="user">Compte Personnel</a></div>
+                    </div>
+                    <h3 class="centered">Creez un compte acheteur</h3>
+                    <div class="ui-grid-solo">
+                        <div class="ui-block-a"><a href="#" data-role="button" data-theme="d" data-icon="user">Compte Acheteur</a></div>
+                    </div>
+                </div>
+                <!--<a href="#" data-role="button" data-theme="e" data-icon="action">Connectez-Vous</a>-->                                                                                                                                                                                                                                                                                                                                     
+                <!--<p>
                     You can also <a href="#aboutPage">learn more</a> about Megacorp.
-                </p>
+                </p>-->
             </div>
             <div data-role="footer">
-                <h4>Copyright Megacorp &copy; 2015</h4>
+                
+                <h4>Copyright Uza-Ticket &copy; 2020</h4>
             </div>
         </div>
 
