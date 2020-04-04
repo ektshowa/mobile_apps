@@ -1,7 +1,8 @@
 from django.db import models
-from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from phonenumber_field.modelfields import PhoneNumberField
 
 BIRTH_MONTHS_CHOICE = tuple([(str(i), str(i)) for i in range(1, 13)])
 YEAR_MONTHS_CHOICE = tuple([(str(i), str(i)) for i in range(1930, 2007)])
@@ -12,6 +13,23 @@ class AbstractTimeStampedModel(models.Model):
                                                             null=True)
     modified_date = models.DateTimeField(auto_now=True, blank=True,
                                                             null=True)
+
+    class Meta:
+        abstract = True
+        
+
+class AbstractNameFieldsModel(models.Model):
+    code = models.CharField("Code", max_length=50, blank=True, null=True)
+    name = models.CharField("Name", max_length=100, blank=True, null=True)
+    slug = models.CharField("Slug", max_length=120, blank=True, null=True)
+    description = models.CharField("Description", max_length=255, blank=True,
+                                    null=True)
+
+    def _get_slug(self):
+        return slugify(self.name)
+
+    def __repr__(self):
+        return "Slug: %s" % (self.slug)
 
     class Meta:
         abstract = True
