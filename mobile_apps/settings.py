@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'phonenumber_field',
     'rest_framework',
+    'core_app',
     'shipping_management',
     'uza_billet'
 ]
@@ -149,3 +151,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, STATIC_URL.strip("/"))
+
+MEDIA_URL = "static/media/"
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, *MEDIA_URL.strip("/").split("/"))
+UZA_TICKET_FILES_UPLOAD_FOLDER = MEDIA_ROOT + "/uploads/uza_ticket/other_files"
+UZA_TICKET_IMAGES_UPLOAD_FOLDER = MEDIA_ROOT + "/uploads/uza_ticket/images"
