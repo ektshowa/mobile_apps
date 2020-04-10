@@ -34,10 +34,12 @@ class Country(AbstractTimeStampedModel):
                                         blank=True, null=True)
 
     def __repr__(self):
-        return "Nom du Pays: %s" % self.english_name
+        name = self.english_name if self.english_name else ""
+        return "Nom du Pays: %s" % name
 
     def __str__(self):
-        return self.code + " - " + self.english_name
+        name = self.english_name if self.english_name else ""
+        return str(self.id) + " - " + name
 
     class Meta:
         verbose_name = _("Pays")
@@ -54,10 +56,14 @@ class Region(AbstractTimeStampedModel, AbstractNameFieldsModel):
     is_active = models.BooleanField(_("En attente d'activation"), default=False)
 
     def __repr__(self):
-        return "Region: %s - %s" % (self.code, self.name)
+        name = self.name if self.name else ""
+        code = self.code if self.code else ""
+        return "Region: %s - %s" % (code, name)
 
     def __str__(self):
-        return self.code + " " + self.name
+        name = self.name if self.name else ""
+        code = self.code if self.code else ""
+        return code + " " + name
 
     def _get_slug(self):
         return slugify(self.name)
@@ -90,10 +96,14 @@ class City(AbstractTimeStampedModel, AbstractNameFieldsModel):
     is_active = models.BooleanField(_("En attente d'activation"), default=False)
 
     def __repr__(self):
-        return "City: %s - %s" % (self.code, self.name)
+        name = self.name if self.name else ""
+        code = self.code if self.code else ""
+        return "City: %s - %s" % (code, name)
 
     def __str__(self):
-        return self.code + " " + self.name
+        name = self.name if self.name else ""
+        code = self.code if self.code else ""
+        return code + " " + name
 
     def _get_slug(self):
         return slugify(self.name)
@@ -117,10 +127,14 @@ class Commune(AbstractTimeStampedModel, AbstractNameFieldsModel):
     is_active = models.BooleanField(_("En attente d'activation"), default=False)
 
     def __repr__(self):
-        return "Commune: %s - %s" % (self.code, self.name)
+        name = self.name if self.name else ""
+        code = self.code if self.code else ""
+        return "Commune: %s - %s" % (code, name)
 
     def __str__(self):
-        return self.code + " " + self.name
+        name = self.name if self.name else ""
+        code = self.code if self.code else ""
+        return code + " " + name
 
     def _get_slug(self):
         return slugify(self.name)

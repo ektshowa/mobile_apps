@@ -1,3 +1,6 @@
-from django.test import TestCase
+form django.urls import reverse
 
-# Create your tests here.
+from rest_framework.test import APITestCase
+from rest_framework.views import status
+
+#from core_app.models import 

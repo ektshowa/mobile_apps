@@ -18,5 +18,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('uza_billet/', include('uza_billet.urls')),
+    path('api/', include('rest_api.urls', namespace="rest_api")),
     path('admin/', admin.site.urls),
 ]

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+    {% load staticfiles %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>C&eacute;ez Organisation</title>
+        <link rel="stylesheet" href="{% static "themes/Bootstrap.css" %}">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <link rel="stylesheet" href="{% static "themes/jquery.mobile.icons.min.css" %}">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+        <style>
+            .centered {
+                text-align: center;
+            }
+            .a-page {
+                background-color: #d5e3d9;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <form action="" method="post">
+            <div data-role="page" id="business_admin" class="a-page">
+                <div data-role="header" data-position="fixed">
+                    <a href="{% url "index" %}" data-icon="carat-l">Retour</a> 
+                    <h1>Uza Ticket</h1>
+                    <a href="#" data-icon="info">Contact</a>
+                </div>
+                <div role="main" class="ui-content">
+                    <h2>Enregistrez le Compte Administrateur Principal</h2>
+                    <div data-role="fieldcontain">
+                        <label for="first_name">Pr&eacute;nom:</label>
+                        <input type="text" name="first_name" id="first_name" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="last_name">Nom:</label>
+                        <input type="text" name="last_name" id="last_name" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="username">Nom d'Utilisateur:</label>
+                        <input type="text" name="username" id="username" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="admin_email">Courriel:</label>
+                        <input type="email" name="admin_email" id="admin_email" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="admin_phone_number">T&eacute;l&eacute;phone de l'administrateur:</label>
+                        <input type="tel" name="admin_phone_number" id="admin_phone_number" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="password">Mot de Passe:</label>
+                        <input type="password" name="password" id="password" value="" autocomplete="off" />
+                    </div>
+                    <p>
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <a data-role="button" href="{% url "index" %}">
+                                    Cancel
+                                </a>
+                            </div>
+                            <div class="ui-block-b">
+                                <a data-role="button" href="#business_address">
+                                    Continue
+                                </a>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+                <div data-role="footer" data-position="fixed">
+                    
+                    <h4>Copyright Uza-Ticket &copy; 2020</h4>
+                </div>
+            </div>
+
+            <div data-role="page" id="business_address" class="a-page">
+                <div data-role="header" data-position="fixed">
+                    <a href="#business_admin" data-icon="carat-l">Retour</a> 
+                    <h1>Uza Ticket</h1>
+                    <a href="#" data-icon="info">Contact</a>
+                </div>
+                <div role="main" class="ui-content">
+                    <h2>Enregistez l'adresse de la Companie</h2>
+                    <div data-role="fieldcontain">
+                        <label for="street">Avenue:</label>
+                        <input type="text" name="street" id="street" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="select_province">Province:</label>
+                        <select name="select_province" id="select_province" data-native-menu="false">
+                            <option>Choisissez la province</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="select_city">Ville ou T&eacute;rritoire:</label>
+                        <select name="select_city" id="select_city" data-native-menu="false">
+                            <option>Choisissez la ville ou t&eacute;rritoire</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="select_commune">Commune:</label>
+                        <select name="select_commune" id="select_commune" data-native-menu="false">
+                            <option>Choisissez la commune</option>
+                        </select>
+                    </div>
+                    <p>
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <a data-role="button" href="{% url "index" %}">
+                                    Cancel
+                                </a>
+                            </div>
+                            <div class="ui-block-b">
+                                <a data-role="button" href="#business_info">
+                                    Continue
+                                </a>
+                            </div>
+                        </div>
+                    </p>
+
+                </div>
+                <div data-role="footer" data-position="fixed">
+                    <h4>Copyright Uza-Ticket &copy; 2020</h4>
+                </div>
+            </div>
+
+            <div data-role="page" id="business_info" class="a-page">
+                <div data-role="header" data-position="fixed">
+                    <a href="#business_address" data-icon="carat-l">Retour</a> 
+                    <h1>Uza Ticket</h1>
+                    <a href="#" data-icon="info">Contact</a>
+                </div>
+                <div role="main" class="ui-content">
+                    <h2>Enregistrez les d&eacute;tails de la Companie</h2>
+                    <div data-role="fieldcontain">
+                        <label for="business_name">Nom de la Companie:</label>
+                        <input type="text" name="business_name" id="business_name" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="identification_number">Num&eacute;ro d'Identification:</label>
+                        <input type="text" name="identification_number" id="identification_number" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="business_email">Courriel de la Companie:</label>
+                        <input type="text" name="business_email" id="business_email" value=""  />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="business_phone_number">T&eacute;l&eacute;phone de la Companie:</label>
+                        <input type="tel" name="business_phone_number" id="business_phone_number" value=""  />
+                    </div>
+                </div>
+                <p>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <a data-role="button" href="{% url "index" %}">
+                                Cancel
+                            </a>
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="submit" data-theme="b" value="C&eacute;ez le Compte" />
+                        </div>
+                    </div>
+                </p>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <h4>Copyright Uza-Ticket &copy; 2020</h4>
+            </div>
+
+        </form>
+        
+        
+    </body>
+</html>
+<script>
+    $(document).ready(function() {
+        console.log("DOM READY");
+        $.get('{% url "rest_api:regions" %}',
+            function(data) {
+                //console.log(data);
+                for (var i=0; i<data.length; i++) {
+                    option_name = data[i].name;
+                    option_value = data[i].pk.toString();
+                    $('<option/>').attr('value', option_value).text(option_name).appendTo('#select_province');
+                }
+                $("#select_province").selectmenu();
+                $("#select_province").selectmenu("refresh", true);
+        });
+        $("#select_province").change(function(e) {
+            e.preventDefault();
+            var el_select = "#select_city";
+            $("option", el_select).not(':eq(0)').remove();
+            var province_id = $(this).find(":selected").val();
+            $.get('{% url "rest_api:cities" %}',
+                { province_id: province_id },
+                function(data) {
+                    for (var i=0; i<data.length; i++) {
+                        option_name = data[i].name;
+                        option_value = data[i].pk.toString();
+                        $('<option/>').attr('value', option_value).text(option_name).appendTo('#select_city');
+                    }
+                    $("#select_city").selectmenu();
+                    $("#select_city").selectmenu("refresh", true);
+                }
+            );
+        });
+        $("#select_city").change(function(e) {
+            e.preventDefault();
+            var el_select = "#select_commune";
+            $("option", el_select).not(":eq(0)").remove();
+            var city_id = $(this).find(":selected").val();
+            $.get('{% url "rest_api:communes" %}',
+                { city_id: city_id },
+                function(data) {
+                    for (var i=0; i<data.length; i++){
+                        option_name = data[i].name;
+                        option_value = data[i].pk.toString();
+                        $('<option/>').attr('value', option_value).text(option_name).appendTo('#select_commune');
+                    }
+                    $("#select_commune").selectmenu();
+                    $("#select_commune").selectmenu("refresh", true);
+                }
+            );
+        });
+    });
+</script>

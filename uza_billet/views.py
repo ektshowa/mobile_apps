@@ -14,3 +14,10 @@ def login(request, template="uza_billet/login.html", extra_context=None):
     context = {}
     return TemplateResponse(request, template, context)
 
+
+def create_business(request, template="uza_billet/create_business.html"
+                                                    , extra_context=None):
+    context = {}
+    return TemplateResponse(request, template, context)
+
+

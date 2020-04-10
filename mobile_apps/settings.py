@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'core_app',
     'shipping_management',
-    'uza_billet'
+    'uza_billet',
+    'rest_api',
 ]
 
 MIDDLEWARE = [
@@ -111,7 +112,13 @@ DATABASES = {
     }
 }
 
-
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
