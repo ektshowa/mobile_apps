@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('uza_billet/', include('uza_billet.urls')),
-    path('api/', include('rest_api.urls', namespace="rest_api")),
+    path('uza_billet/', include('uza_billet.urls', namespace='uza_billet')),
+    path('api/', include('rest_api.urls', namespace='rest_api')),
     path('admin/', admin.site.urls),
 ]

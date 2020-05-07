@@ -3,7 +3,7 @@ from rest_framework.generics import ListAPIView, \
                                     RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from core_app.models import Country, Region, City, Commune
-from rest_api.serializers.address import RegionSerializer, CountrySerializer,\
+from rest_api.serializers.core_app import RegionSerializer, CountrySerializer,\
                                         CitySerializer, CommuneSerializer
 import sys, traceback
 

@@ -21,10 +21,10 @@
         </style>
     </head>
     <body>
-        <form action="" method="post">
+        <form action="{% url 'rest_api:business_entities' %}" method="post">
             <div data-role="page" id="business_admin" class="a-page">
                 <div data-role="header" data-position="fixed">
-                    <a href="{% url "index" %}" data-icon="carat-l">Retour</a> 
+                    <a href="{% url "uza_billet:index" %}" data-icon="carat-l">Retour</a> 
                     <h1>Uza Ticket</h1>
                     <a href="#" data-icon="info">Contact</a>
                 </div>
@@ -42,6 +42,16 @@
                         <label for="username">Nom d'Utilisateur:</label>
                         <input type="text" name="username" id="username" value=""  />
                     </div>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <label for="month_birth">Mois de Naissance:</label>
+                            <input type="text" name="month_birth" id="month_birth" value=""  />
+                        </div>
+                        <div class="ui-block-b">
+                            <label for="year_birth">Ann&eacute;e de Naissance:</label>
+                            <input type="text" name="year_birth" id="year_birth" value=""  />
+                        </div>
+                    </div>
                     <div data-role="fieldcontain">
                         <label for="admin_email">Courriel:</label>
                         <input type="email" name="admin_email" id="admin_email" value=""  />
@@ -57,7 +67,7 @@
                     <p>
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
-                                <a data-role="button" href="{% url "index" %}">
+                                <a data-role="button" href="{% url "uza_billet:index" %}">
                                     Cancel
                                 </a>
                             </div>
@@ -108,7 +118,7 @@
                     <p>
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
-                                <a data-role="button" href="{% url "index" %}">
+                                <a data-role="button" href="{% url "uza_billet:index" %}">
                                     Cancel
                                 </a>
                             </div>
@@ -154,7 +164,7 @@
                 <p>
                     <div class="ui-grid-a">
                         <div class="ui-block-a">
-                            <a data-role="button" href="{% url "index" %}">
+                            <a data-role="button" href="{% url "uza_billet:index" %}">
                                 Cancel
                             </a>
                         </div>
