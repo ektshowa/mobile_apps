@@ -97,4 +97,25 @@ class BusinessTeamMember(AbstractProfile):
         verbose_name_plural = _("Membres Équipes")
 
     
+class IndividualBuyer(AbstractProfile, AbstractTimeStampedModel):
+    auth_user = models.OneToOneField(User,
+                                    on_delete=models.CASCADE,
+                                    related_name="team_member_user")
+    address = models.ForeignKey(Address,
+                                related_name="business_address",
+                                db_index=True,
+                                on_delete=models.CASCADE,
+                                verbose_name=_("Adresse"),
+                                blank=True)
+    
+    def __repr__(self):
+        return "Acheteur: %s %s" % (self.auth_user.first_name,
+                                    self.auth_user.last_name)
 
+    def __str__(self):
+        return "Acheteur: %s %s" % (self.auth_user.first_name,
+                                    self.auth_user.last_name)
+
+    class Meta:
+        verbose_name = _("Acheteur")
+        verbose_name_plural = _("Acheteurs")

@@ -91,7 +91,7 @@ class UzaBilletFormDataProcessing:
                 "is_team_admin": data.get("is_team_admin", False),
                 "month_birth": data.get("month_birth", ""),
                 "year_birth": data.get("year_birth", ""),
-                "phone_number": data.get("phone_number", "")
+                "phone_number": data.get("admin_phone_number", "")
             }
         return team_member
 

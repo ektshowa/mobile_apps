@@ -158,8 +158,8 @@ class BusinessTeamMemberSerializer(serializers.Serializer):
         print("IN SAVE TEAMMEMBER METHOD")
         print(self.validated_data)
 
-        is_active = self.validated_data.get("is_active", "")
-        is_team_admin = self.validated_data.get("is_team_active", "")
+        is_active = self.validated_data.get("is_active", True)
+        is_team_admin = self.validated_data.get("is_team_active", True)
         month_birth = self.validated_data.get("month_birth", "")
         year_birth = self.validated_data.get("year_birth", "")
         phone_number = self.validated_data.get("phone_number", "")
@@ -174,6 +174,8 @@ class BusinessTeamMemberSerializer(serializers.Serializer):
             team_member.month_birth = month_birth
             team_member.year_birth = year_birth
             team_member.phone_number = phone_number
+            team_member.auth_user = auth_user
+            team_member.business_team = business_team
             print("IN BEFORE SAVE TEAMMEMBER")
             print(team_member.__dict__)
             team_member.save()

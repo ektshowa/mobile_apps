@@ -52,6 +52,11 @@ class BusinessView(APIView):
             "business_phone_number": request.POST.get(
                                         "business_phone_number", "")
         }
+        team_member_data = {
+            "month_birth": request.POST.get("month_birth", ""),
+            "year_birth": request.POST.get("year_birth", ""),
+            "admin_phone_number": request.POST.get("admin_phone_number", "")    
+        }
         data_processing = UzaBilletFormDataProcessing()
         try:
             admin_result = data_processing.save_user_admin(**user_admin_data)
@@ -66,6 +71,8 @@ class BusinessView(APIView):
         admin_success = admin_result.get("success", False)
         admin_user = admin_result.get("data", None)
         address_result = {"success": False, "data": None}
+        business_result = {"success": False, "data": None}
+        business_team_result = {"success": False, "data": None}
 
         print("PRINTING SUCCESS AND ADMIN_USER")
         print("{} {}".format(admin_success, admin_user))
@@ -86,8 +93,30 @@ class BusinessView(APIView):
                                     more_data=more_data, **business_data)
             print("PRINTING BUSINESS SAVED RESULT")
             print(business_result)
-        
 
+        business_success = business_result.get("success", False)
+        if business_success and admin_success:
+            business_entity = business_result.get("data")
+            more_data = {"team_lead": admin_user,
+                        "business_entity": business_entity}
+            business_team_result = data_processing.save_business_team(
+                                                        more_data=more_data)
+            print("PRINTING BUSINESS TEAM SAVED RESULT")
+            print(business_team_result)
+        else:
+            business_entity = None
+
+        business_team_success = business_team_result.get("success", False)
+        if business_team_success and business_entity:
+            business_team = business_team_result.get("data", None)
+            more_data = {"auth_user": admin_user,
+                        "business_team": business_team}
+            team_member_data["is_active"] = True
+            team_member_data["is_team_admin"] = True
+            team_member_result = data_processing.save_team_member(
+                                    more_data=more_data, **team_member_data)
+            print("PRINTING TEAM MEMBER")
+            print(team_member_result)   
 
         if admin_success:
             return Response({"admin_user":admin_user},
