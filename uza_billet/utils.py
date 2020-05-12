@@ -7,7 +7,8 @@ from .queries_utils import ModelsQueries
 from rest_api.serializers.core_app import UserSerializer, AddressSerializer
 from rest_api.serializers.uza_billet import BusinessEntitySerializer, \
                                             BusinessTeamSerializer, \
-                                            BusinessTeamMemberSerializer
+                                            BusinessTeamMemberSerializer, \
+                                            IndividualBuyerSerializer
 import sys, traceback
 
 
@@ -57,6 +58,23 @@ class UzaBilletFormDataProcessing:
                 "is_active": data.get("is_active", False)}
         return business_admin
 
+    def _get_auth_user_data(self, **form_data):
+        data = get_data(**form_data)
+        user = {}
+
+        print("IN GET USER DATA")
+        print(data) 
+        if data:
+            #HERE CHECK DATA["USERNAME"] VALUE
+            user = {
+                "first_name": data.get("first_name", ""),
+                "last_name": data.get("last_name", ""),
+                "username": data.get("username", ""),
+                "email": data.get("email", ""),
+                "password": data.get("password", ""),
+                "is_active": data.get("is_active", True)}
+        return user
+
     def _get_business_admin_data(self, admin_user, **form_data):
         data = get_data(**form_data)
         business_admin = {}
@@ -67,7 +85,6 @@ class UzaBilletFormDataProcessing:
                     "admin_phone_number": data.get("admin_phone_number", "")
                 }
         return business_admin
-
 
     def _get_business_data(self, **form_data):
         data = get_data(**form_data)
@@ -95,6 +112,18 @@ class UzaBilletFormDataProcessing:
             }
         return team_member
 
+    def _get_individual_buyer_data(self, **form_data):
+        data = get_data(**form_data)
+        individual_buyer = {}
+
+        if data:
+            individual_buyer = {
+                "month_birth": data.get("month_birth", ""),
+                "year_birth": data.get("year_birth", ""),
+                "phone_number": data.get("phone_number", "")
+            }
+        return individual_buyer
+
     def save_user_admin(self, **form_data):
         business_admin_data = self._get_admin_user_data(**form_data)
         print("PRINTING BUSINESS ADMIN DATA")
@@ -113,6 +142,21 @@ class UzaBilletFormDataProcessing:
             result = {"success": False, "data": data}
         return result
 
+    def save_auth_user(self, **form_data):
+        auth_user_data = self._get_auth_user_data(**form_data)
+        print("PRINTING USER DATA")
+        print(auth_user_data)
+        serializer = UserSerializer(data=auth_user_data)
+        if serializer.is_valid(raise_exception=True):
+            auth_user_saved = serializer.save()
+            if auth_user_saved:
+                result = {"success": True, "data": auth_user_saved}
+            else:
+                result = {"success": False}
+        else:
+            data = serializer.errors
+            result = {"success": False, "data": data}
+        return result
 
     def save_address(self, **form_data):
         data = self._get_address_data(**form_data)
@@ -265,57 +309,46 @@ class UzaBilletFormDataProcessing:
             result = {"success": False, "data": data}
         return result
 
+    def save_individual_buyer(self, more_data={"auth_user":None,
+                                                "address":None}, **form_data):
+        auth_user = more_data.get("auth_user")
+        address = more_data.get("address")
+        if not auth_user:
+            return None
+
+        data = self._get_individual_buyer_data(**form_data)
+
+        print("PRINTING INDIVIDUAL BUYER DATA")
+        print(data)
+
+        month_birth = data.get("month_birth", "")
+        year_birth = data.get("year_birth", "")
+        phone_number = data.get("phone_number", "")
+
+        individual_buyer_data = {"month_birth": month_birth,
+                                "year_birth": year_birth,
+                                "phone_number": phone_number}
+
+        serializer = IndividualBuyerSerializer(data=individual_buyer_data)
+        print("SERIALIZER IN SAVE INDIVIDUAL BUYER")
+        print(serializer.__dict__)
+
+        if serializer.is_valid():
+            individual_buyer_saved = serializer.save(auth_user=auth_user,
+                                                    address=address)
+            if individual_buyer_saved:
+                result = {"success": True, "data": individual_buyer_saved}
+            else:
+                result = {"sucess": False}
+            print("IS VALID SERIALIZER RESULT")
+            print(result)
+        else:
+            print("PRINT SAVE BUSINESS ERROR")
+            print(serializer.errors)
+            data = serializer.errors
+            result = {"success": False, "data": data}
+        return result
+
+
         
-
-
-
-        """
-        business_entity = BusinessEntity()
-        try:
-            business_entity.address = address
-            business_entity.account_admin = user_admin
-            business_entity.business_name = business_name
-            business_entity.business_email = business_email
-            business_entity.business_phone_number = business_phone_number
-            business_entity.identification_number = identification_number
-            business_entity.save()
-            result["business_entity"] = business_entity
-        except Exception:
-            business_entity = None
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            traceback.print_exception(exc_type, exc_value, exc_traceback)
-        
-        if not business_entity:
-            return result
-
-        business_team = BusinessTeam()
-        try:
-            business_team.business_entity = business_entity
-            business_team.team_lead = user_admin
-            business_team.is_active = True
-            business_team.save()
-            result["business_team"] = business_team
-        except Exception:
-            business_team = None
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            traceback.print_exception(exc_type, exc_value, exc_traceback)
-
-        if not business_team:
-            return result
-            
-        team_member = BusinessTeamMember()
-        try:
-            team_member.auth_user = user_admin
-            team_member.business_team = business_team
-            team_member.is_active = True
-            team_member.is_team_admin = True
-            team_member.phone_number = admin_email.get("admin_phone_number", "")
-            team_member.save()
-            result["team_member_admin"] = team_member
-        except Exception:
-            team_member = None
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            traceback.print_exception(exc_type, exc_value, exc_traceback)
-
-        return result"""
         

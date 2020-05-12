@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from uza_billet.models import BusinessEntity, BusinessTeam, BusinessTeamMember,\
-                                IndividualEntity
+                                IndividualEntity, IndividualBuyer
 from .core_app import UserSerializer, AddressSerializer, is_valid_email
 import sys, traceback
 
@@ -202,3 +202,55 @@ class IndividualEntitySerializer(serializers.Serializer):
     modified_date = serializers.DateTimeField()
     
     
+class IndividualBuyerSerializer(serializers.Serializer):
+    auth_user = UserSerializer(required=False)
+    address = AddressSerializer(required=False)
+
+    month_birth = serializers.CharField(max_length=2)
+    year_birth = serializers.CharField(max_length=4)
+    phone_number = serializers.CharField(max_length=30)
+
+    def validate_phone_number(self, value):
+        if not value:
+            raise serializers.ValidationError("phone number cannot be null")
+        return value
+
+    def validate_month_birth(self, value):
+        if not value:
+            raise serializers.ValidationError("month_birth should be boolean")
+        return value
+    
+    def validate_year_birth(self, value):
+        if not value:
+            raise serializers.ValidationError("year_birth should be boolean")
+        return value
+
+    def save(self, auth_user=auth_user, address=address):
+        if not auth_user:
+            return None
+
+        print("IN SAVE INDIVIDUAL BUYER METHOD")
+        print(self.validated_data)
+
+        month_birth = self.validated_data.get("month_birth", "")
+        year_birth = self.validated_data.get("year_birth", "")
+        phone_number = self.validated_data.get("phone_number", "")
+
+        print("PRINTING SELF INDIVIDUAL BUYER DATA")
+        print(self.data)
+
+        try:
+            individual_buyer = IndividualBuyer()
+            individual_buyer.month_birth = month_birth
+            individual_buyer.year_birth = year_birth
+            individual_buyer.phone_number = phone_number
+            individual_buyer.auth_user = auth_user
+            individual_buyer.address = address
+            print("IN BEFORE SAVE INDIVIDUAL BUYER")
+            print(individual_buyer.__dict__)
+            individual_buyer.save()
+        except Exception:
+            individual_buyer = None
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+        return individual_buyer

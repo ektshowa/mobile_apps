@@ -2,7 +2,8 @@ from django.urls import path, include
 from .views.core_app_views import RegionListAPIView , \
                                     CityListAPIView, \
                                     CommuneListAPIView
-from .views.uza_billet_views import BusinessView, LoginView
+from .views.uza_billet_views import BusinessView, LoginView, \
+                                    CreateIndividualBuyerView
 
 
 app_name = "rest_api"
@@ -13,4 +14,6 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name="login"),
     path('business_entities/', BusinessView.as_view(),
                                             name="business_entities"),
+    path('individual_buyers/', CreateIndividualBuyerView.as_view(),
+                                            name="individual_buyers"),
 ]

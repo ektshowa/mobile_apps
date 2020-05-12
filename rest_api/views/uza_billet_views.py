@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.auth import login as auth_login
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 #from rest_framework.generics import ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -140,3 +142,83 @@ class LoginView(APIView):
     def get(self, request):
         data = {}
         return Response(data, template_name="uza_billet/login.html")
+
+
+class CreateIndividualBuyerView(APIView):
+    queryset = User.objects.none()
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def get(self, request):
+        data = {}
+        return Response(data,
+                    template_name="uza_billet/create_individual_buyer.html")
+
+    def post(self, request):
+        print("IN CREATE INDIVIDUAL BUYER POST")
+        address_data = {
+            "street": request.POST.get("street"),
+            "select_province": request.POST.get("select_province"),
+            "select_city": request.POST.get("select_city"),
+            "select_commune": request.POST.get("select_commune")
+        }
+        print(request.POST)
+        user_buyer_data = {
+            "first_name": request.POST.get("first_name", ""),
+            "last_name": request.POST.get("last_name", ""),
+            "email": request.POST.get("email", ""),
+            "username": request.POST.get("username", ""),
+            "password": request.POST.get("password", ""),
+        }
+        if not user_buyer_data.get("username", ""):
+            user_buyer_data["username"] = "{}_{}".format(
+                                       user_buyer_data["first_name"],
+                                       user_buyer_data["last_name"])
+        individual_buyer_data = {
+            "month_birth": request.POST.get("month_birth", ""),
+            "year_birth": request.POST.get("year_birth", ""),
+            "phone_number": request.POST.get("phone_number", "")
+        }
+        data_processing = UzaBilletFormDataProcessing()
+        try:
+            user_buyer_data["is_active"] = True
+
+            auth_user_result = data_processing.save_auth_user(**user_buyer_data)
+        except Exception:
+            auth_user_result = {}
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+
+        print("AUTH USER AFTER SAVE")
+        print(auth_user_result)
+
+        auth_user_success = auth_user_result.get("success", False)
+        auth_user = auth_user_result.get("data", None)
+        address_result = {"success": False, "data": None}
+        individual_buyer_result = {"success": False, "data": None}
+        
+        if auth_user_success:
+            address_result = data_processing.save_address(**address_data)
+            print("PRINTING ADDRESS SAVED RESULT")
+            print(address_result)
+            
+            address = address_result.get("data", None)
+            more_data = {"auth_user": auth_user, "address": address}
+            individual_buyer_result = \
+                        data_processing.save_individual_buyer(
+                                more_data=more_data, **individual_buyer_data)
+            print("PRINTING INDIVIDUAL BUYER SAVED RESULT")
+            print(individual_buyer_result)
+
+        individual_buyer_success = individual_buyer_result.get(
+                                                        "success", False)
+        if individual_buyer_success:
+            return HttpResponseRedirect(reverse("uza_billet:index"))
+        else:
+            return Response({"auth_user":auth_user},
+                                status=status.HTTP_400_BAD_REQUEST,
+                                template_name="uza_billet/index.html")
+
+
+        
+
+
