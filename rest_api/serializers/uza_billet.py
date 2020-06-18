@@ -291,7 +291,7 @@ class EventSerializer(serializers.Serializer):
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
         return event
-    
+
     
 class IndividualBuyerSerializer(serializers.Serializer):
     auth_user = UserSerializer(required=False)

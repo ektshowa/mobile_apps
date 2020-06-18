@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.auth import login as auth_login
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 #from rest_framework.generics import ListCreateAPIView
 from rest_framework.views import APIView
@@ -11,7 +11,8 @@ from core_app.models import Address
 from rest_api.serializers.core_app import AddressSerializer
 from rest_api.serializers.uza_billet import BusinessEntitySerializer
 from uza_billet.models import BusinessEntity, Event
-from uza_billet.utils import UzaBilletFormDataProcessing
+from uza_billet.utils import UzaBilletFormDataProcessing, SerializersQueries
+from uza_billet.queries_utils import ModelsQueries
 import sys, traceback
 
 
@@ -188,18 +189,24 @@ class ManageEventView(APIView):
         #event = event_result.get("data", None)
 
         if event_success:
-            return Response({"event_created": "success"})
+            event = event_result.get("data", None)
+            data = {}
+            if event:
+                data = {"name": event.name,
+                        "unit_price": event.unit_price,
+                        "event_date": event.event_date}
+            return JsonResponse({"data": data})
         else:
             return Response({"event": "failed"})
 
 
 class SellerAccountView(APIView):
     queryset = Event.objects.none()
-    renderer_classes = [TemplateHTMLRenderer]
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
 
     def get(self, request):
-        data = {}
-        return Response(data, template_name="uza_billet/seller_account_page.html")
+        data = SerializersQueries.get_all_events_data()
+        return Response({"data": data}, template_name="uza_billet/seller_account_page.html")
 
 
 class LoginView(APIView):

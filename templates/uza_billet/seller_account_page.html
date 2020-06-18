@@ -42,6 +42,26 @@
                     <a href="{% url 'rest_api:events' %}" data-role="button" data-theme="e" data-icon="action">Cr&eacute;ez un &Eacute;v&egrave;nement</a>
                 </div>
                 <h4>Vos &Eacute;v&egrave;nements</h4>
+                {% if data %}
+                    <table data-role="table" id="events_table" data-mode="columntoggle">
+                        <thead>
+                            <tr>
+                                <th>Nom de l'&eacute;v&egrave;nement</th>
+                                <th>Date</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for d in data %}
+                            <tr>
+                                <td>{{ d.name }}</td>
+                                <td>{{ d.event_date }}</td>
+                                <td>{{ d.unit_price }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
             <div data-role="footer" data-position="fixed">
                 <h4>Copyright Uza-Ticket &copy; 2020</h4>

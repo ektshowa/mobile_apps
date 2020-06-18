@@ -415,5 +415,20 @@ class UzaBilletFormDataProcessing:
         return result
 
 
-        
+class SerializersQueries:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def get_all_events_data():
+        events = ModelsQueries.get_all_events()
+        data = None    
+        if events:
+            try:
+                serializer = EventSerializer(events, many=True)
+                data = serializer.data
+            except Exception:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                traceback.print_exception(exc_type, exc_value, exc_traceback)
+        return data        
         

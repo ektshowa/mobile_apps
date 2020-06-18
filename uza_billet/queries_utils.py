@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from core_app.models import Address, Region, City, Commune, Country
 from .models import BusinessEntity, BusinessTeam, BusinessTeamMember,\
-                                IndividualEntity
+                                IndividualEntity, Event
 import sys, traceback
 
 
@@ -80,6 +80,16 @@ class ModelsQueries:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
         return country
+
+    @staticmethod
+    def get_all_events():
+        events = None
+        try:
+            events = Event.objects.all()
+        except Exception:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+        return events
         
         
         
