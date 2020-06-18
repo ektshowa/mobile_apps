@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    {% load staticfiles %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Uza Billet Facile</title>
+        <link rel="stylesheet" href="{% static "themes/Bootstrap.css" %}">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <link rel="stylesheet" href="{% static "themes/jquery.mobile.icons.min.css" %}">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+
+        <style>
+            .centered {
+                text-align: center;
+            }
+            .a-page {
+                background-color: #d5e3d9;
+            }
+            .button-menu {
+                margin: 30px;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div data-role="page" id="sellerPage" class="a-page">
+            <div data-role="header" data-position="fixed">
+                <a href="index.html" data-icon="home">Home</a>
+                <h1>Uza Ticket</h1>
+                <a href="#" data-icon="info">Contact</a>
+            </div>
+            <div role="main" class="ui-content">
+                <h3 class="centered">G&eacute;rez votre Compte</h3>
+                <div class="button-menu">
+                    <a href="" data-role="button" data-theme="e" data-icon="action">Modifiez votre Compte</a>
+                </div>
+                <div class="button-menu">
+                    <a href="{% url 'rest_api:events' %}" data-role="button" data-theme="e" data-icon="action">Cr&eacute;ez un &Eacute;v&egrave;nement</a>
+                </div>
+                <h4>Vos &Eacute;v&egrave;nements</h4>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <h4>Copyright Uza-Ticket &copy; 2020</h4>
+            </div>
+        </div>
+    </body>
+</body>
+</html>

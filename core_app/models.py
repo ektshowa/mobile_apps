@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import DecimalField
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
@@ -148,4 +149,10 @@ class Commune(AbstractTimeStampedModel, AbstractNameFieldsModel):
         verbose_name = _("Commune")
 
 
+class MoneyField(DecimalField):
+    def __init__(self, *args, **kwargs):
+        defaults = {"null": True, "blank": True, "max_digits": 10,
+                    "decimal_places": 2}
+        defaults.update(kwargs)
+        super(MoneyField, self).__init__(*args, **defaults)
 

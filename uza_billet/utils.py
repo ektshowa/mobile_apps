@@ -8,8 +8,10 @@ from rest_api.serializers.core_app import UserSerializer, AddressSerializer
 from rest_api.serializers.uza_billet import BusinessEntitySerializer, \
                                             BusinessTeamSerializer, \
                                             BusinessTeamMemberSerializer, \
-                                            IndividualBuyerSerializer
+                                            IndividualBuyerSerializer, \
+                                            EventSerializer
 import sys, traceback
+import datetime
 
 
 def get_data(**form_data):
@@ -124,6 +126,21 @@ class UzaBilletFormDataProcessing:
             }
         return individual_buyer
 
+    def _get_event_data(self, **form_data):
+        data = get_data(**form_data)
+        event = {}
+        if data:
+            event = {
+                "name": data.get("event_name", ""),
+                "description": data.get("event_description", ""),
+                "unit_price": data.get("price", ""),
+                "sale_price": data.get("sale_price", ""),
+                "event_date": data.get("date_event", None),
+                "sale_from": data.get("date_sale_from", None),
+                "sale_to": data.get("date_sale_to", None)
+            }
+        return event
+
     def save_user_admin(self, **form_data):
         business_admin_data = self._get_admin_user_data(**form_data)
         print("PRINTING BUSINESS ADMIN DATA")
@@ -236,6 +253,54 @@ class UzaBilletFormDataProcessing:
             data = serializer.errors
             result = {"success": False, "data": data}
         return result
+
+    def save_event(self, address=None, **form_data):
+        data = self._get_event_data(**form_data)
+
+        print("PRINTING EVENT DATA")
+        print(data)
+
+        name = data.get("name")
+        description = data.get("description")
+        unit_price = data.get("unit_price")
+        sale_price = data.get("sale_price")
+        event_date = data.get("event_date")
+        sale_from = data.get("sale_from")
+        sale_to = data.get("sale_to")
+
+        event_date = datetime.datetime.strptime(event_date, "%d/%m/%Y").\
+                                                strftime("%Y-%m-%d %H:%M:%S")
+        sale_from = datetime.datetime.strptime(sale_from, "%d/%m/%Y").\
+                                                strftime("%Y-%m-%d %H:%M:%S")
+        sale_to = datetime.datetime.strptime(sale_to, "%d/%m/%Y").\
+                                                strftime("%Y-%m-%d %H:%M:%S")
+
+        event_data = {"name": name,
+                    "description": description,
+                    "unit_price": unit_price,
+                    "sale_price": sale_price,
+                    "event_date": event_date,
+                    "sale_from": sale_from,
+                    "sale_to": sale_to}
+        serializer = EventSerializer(data=event_data)
+        print("SERIALIZER IN SAVE EVENT")
+        print(serializer.__dict__)
+
+        if serializer.is_valid():
+            event_saved = serializer.save(address=address)
+            if event_saved:
+                result = {"success": True, "data": event_saved}
+            else:
+                result = {"success": False}
+            print("IS VALID SERIALIZER RESULT")
+            print(result)
+        else:
+            print("PRINT SAVE EVENT ERROR")
+            print(serializer.errors)
+            data = serializer.errors
+            result = {"success": False, "data": data}
+        return result
+
 
     def save_business_team(self, more_data={"team_lead":None,
                                                 "business_entity":None}):

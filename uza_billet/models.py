@@ -1,9 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.utils.timezone import now
+from decimal import Decimal
 from core_app.abstract_models import AbstractTimeStampedModel,\
+                                    AbstractNameFieldsModel,\
                                     AbstractProfile, AbstractBusinessEntity
-from core_app.models import Address, ImageFile
+from core_app.models import Address, ImageFile, MoneyField
 import sys, traceback
 
 
@@ -119,3 +122,49 @@ class IndividualBuyer(AbstractProfile):
     class Meta:
         verbose_name = _("Acheteur")
         verbose_name_plural = _("Acheteurs")
+
+
+class Event(AbstractTimeStampedModel, AbstractNameFieldsModel):
+    address = models.ForeignKey(Address,
+                                related_name="event_address",
+                                db_index=True,
+                                on_delete=models.CASCADE,
+                                verbose_name=_("Adresse"),
+                                blank=True)
+    unit_price = MoneyField("Prix",
+                            null=True,
+                            blank=True)
+    sale_price = MoneyField("Prix Promotionel",
+                            null=True,
+                            blank=True)
+    sale_from = models.DateTimeField("Date Debut Promotion",
+                            null=True,
+                            blank=True)
+    sale_to = models.DateTimeField("Date Fin Promotion",
+                            null=True,
+                            blank=True)
+    event_date = models.DateTimeField("Date de l'evenement",
+                                    null=True,
+                                    blank=True)
+
+    def __repr__(self):
+        return "Ticket: %s - %s" % (self.id, self.name)
+
+    def __str__(self):
+        return "Ticket: %s - %s" % (self.id, self.name)
+
+    def on_sale(self):
+        n = now()
+        valid_from = self.sale_from is None or self.sale_from < n
+        valid_to = self.sale_to is None or self.sale_to > n
+        return self.sale_price is not None and valid_from and valid_to
+
+    def has_price(self):
+        return self.on_sale() or self.price is not None
+
+    def price(self):
+        if self.on_sale():
+            return self.sale_price
+        elif self.has_price():
+            return self.unit_price
+        return Decimal("0")   

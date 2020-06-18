@@ -10,7 +10,7 @@ from rest_framework import status
 from core_app.models import Address
 from rest_api.serializers.core_app import AddressSerializer
 from rest_api.serializers.uza_billet import BusinessEntitySerializer
-from uza_billet.models import BusinessEntity
+from uza_billet.models import BusinessEntity, Event
 from uza_billet.utils import UzaBilletFormDataProcessing
 import sys, traceback
 
@@ -22,6 +22,7 @@ import sys, traceback
 class BusinessView(APIView):
     queryset = User.objects.none()
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    #renderer_classes = [JSONRenderer]
     
     def post(self, request):
         print("IN BUSINESS VIEW POST")
@@ -121,17 +122,84 @@ class BusinessView(APIView):
             print(team_member_result)   
 
         if admin_success:
-            return Response({"admin_user":admin_user},
-                                status=status.HTTP_201_CREATED,
-                                template_name="uza_billet/index.html")
+            #return Response({"admin_user":admin_user},
+            #                    status=status.HTTP_201_CREATED,
+            #                    template_name="uza_billet/index.html")
+            return Response({"admin_user": "success"})
         else:
-            return Response({"admin_user":admin_user},
-                                status=status.HTTP_400_BAD_REQUEST,
-                                template_name="uza_billet/index.html")    
+            #return Response({"admin_user":admin_user},
+            #                    status=status.HTTP_400_BAD_REQUEST,
+            #                    template_name="uza_billet/index.html")
+            return Response({"admin_user":"failed"})    
 
     def get(self, request):
         data = {}
         return Response(data, template_name="uza_billet/create_business.html")
+
+
+class ManageEventView(APIView):
+    queryset = Event.objects.none()
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def get(self, request):
+        data = {}
+        return Response(data, template_name="uza_billet/create_event.html")
+
+    def post(self, request):
+        print("IN MANAGE EVENT VIEW")
+        print(request.POST)
+        event_data = {
+            "event_name": request.POST.get("event_name"),
+            "event_description": request.POST.get("event_description"),
+            "price": request.POST.get("price"),
+            "date_event": request.POST.get("date_event"),
+            "sale_price": request.POST.get("sale_price"),
+            "date_sale_from": request.POST.get("date_sale_from"),
+            "date_sale_to": request.POST.get("date_sale_to"),
+        }
+        address_data = {
+            "street": request.POST.get("street"),
+            "select_province": request.POST.get("select_province"),
+            "select_city": request.POST.get("select_city"),
+            "select_commune": request.POST.get("select_commune")
+        }
+
+        data_processing = UzaBilletFormDataProcessing()
+
+        try:
+            address_result = data_processing.save_address(**address_data)
+        except Exception:
+            address_result = {"success": False, "data": None}
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+        print("PRINTING ADDRESS SAVED RESULT")
+        print(address_result)
+            
+        address = address_result.get("data", None)
+        try:
+            event_result = data_processing.save_event(address=address,**event_data)
+        except Exception:
+            event_result = {"success": False, "data": None}
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+        print("PRINTING EVENT SAVED RESULT")
+        print(event_result)
+        event_success = event_result.get("success", False)
+        #event = event_result.get("data", None)
+
+        if event_success:
+            return Response({"event_created": "success"})
+        else:
+            return Response({"event": "failed"})
+
+
+class SellerAccountView(APIView):
+    queryset = Event.objects.none()
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request):
+        data = {}
+        return Response(data, template_name="uza_billet/seller_account_page.html")
 
 
 class LoginView(APIView):

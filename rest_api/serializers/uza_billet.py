@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from uza_billet.models import BusinessEntity, BusinessTeam, BusinessTeamMember,\
-                                IndividualEntity, IndividualBuyer
+                                IndividualEntity, IndividualBuyer, Event
 from .core_app import UserSerializer, AddressSerializer, is_valid_email
 import sys, traceback
 
@@ -200,6 +200,97 @@ class IndividualEntitySerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=30)
     created_date = serializers.DateTimeField()
     modified_date = serializers.DateTimeField()
+
+
+class EventSerializer(serializers.Serializer):
+    address = AddressSerializer(required=False)
+
+    name = serializers.CharField(max_length=255)
+    description = serializers.CharField(max_length=255)
+    #code = serializers.CharField(max_length=10)
+    unit_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    event_date = serializers.DateTimeField()
+    sale_price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    sale_from = serializers.DateTimeField()
+    sale_to = serializers.DateTimeField()
+
+    def validate_name(self, value):
+        if not value:
+            raise serializers.ValidationError("name cannot be null")
+        return value
+
+    def validate_description(self, value):
+        if not value:
+            raise serializers.ValidationError("description cannot be null")
+        return value
+    
+    """
+    def validate_code(self, value):
+        if not value:
+            raise serializers.ValidationError("code cannot be null")
+        return value
+    """
+
+    def validate_unit_price(self, value):
+        if not value:
+            raise serializers.ValidationError("unit price cannot be null")
+        return value
+
+    def validate_event_date(self, value):
+        if not value:
+            raise serializers.ValidationError("event date cannot be null")
+        return value
+
+    def validate_sale_price(self, value):
+        if not value:
+            raise serializers.ValidationError("sale price cannot be null")
+        return value
+
+    def validate_sale_from(self, value):
+        if not value:
+            raise serializers.ValidationError("sale from cannot be null")
+        return value
+
+    def validate_sale_to(self, value):
+        if not value:
+            raise serializers.ValidationError("sale to cannot be null")
+        return value
+
+    def save(self, address=None):
+        print("IN SAVE EVENT METHOD")
+        print(self.validated_data)
+
+        name = self.validated_data.get("name", "")
+        description = self.validated_data.get("description", "")
+        #code = self.validated_data.get("code", "")
+        unit_price = self.validated_data.get("unit_price", 0.00)
+        event_date = self.validated_data.get("event_date", None)
+        sale_price = self.validated_data.get("sale_price", 0.00)
+        sale_from = self.validated_data.get("sale_from", None)
+        sale_to = self.validated_data.get("sale_to", None)
+
+        print("PRINTING SELF EVENT DATA")
+        print(self.data)
+
+        try:
+            event = Event()
+            event.name = name
+            event.description = description
+            #event.code = code
+            event.unit_price = unit_price
+            event.event_date = event_date
+            event.sale_price = sale_price
+            event.sale_from = sale_from
+            event.sale_to = sale_to
+            event.address = address
+            print("IN BEFORE SAVE EVENT")
+            print(event.__dict__)
+            event.save()
+        except Exception:
+            event = None
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+        return event
     
     
 class IndividualBuyerSerializer(serializers.Serializer):
