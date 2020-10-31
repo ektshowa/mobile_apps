@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+    <head>
+        <title>Recensement de la Population - Se Connecter</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static "census/css/themes/1/census-mobile-app.min.css" %}" rel="stylesheet" />
+        <link href="{% static "census/css/themes/1/jquery.mobile.icons.min.css" %}" rel="stylesheet" />
+        <link href="{% static "census/jqm/1.4.5/jquery.mobile.structure-1.4.5.min.css" %}" rel="stylesheet" />
+        <link href="{% static "census/css/app.css" %}" rel="stylesheet" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="{% static "census/js/settings.js" %}" type="text/javascript"></script>
+        <script src="{% static "census/js/api-messages.js" %}" type="text/javascript"></script>
+        <script src="{% static "census/jqm/1.4.5/jquery.mobile-1.4.5.min.js" %}"></script>
+        <script src="{% static "census/js/sign-in.js" %}" type="text/javascript"></script>
+    </head>
+    <body>
+        <div data-role="page" id="login_page" class="a-page">
+            <div data-role="header" data-theme="c">
+                <a href="" data-icon="carat-l">Retour</a>
+                <h1>R.D.C. Recensement</h1>
+                <a href="" data-icon="info">Contact</a>
+            </div>
+            <div role="main" class="ui-content">
+                <h3>Connectez-Vous</h3>
+                <form action="" method="post">
+                    <div data-role="fieldcontain">
+                        <label for="username">Nom d'Uilisateur</label>
+                        <input type="text" name="username" id="username" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="passowrd">Mot de Passe</label>
+                        <input type="password" name="password" id="password" value="" autocomplete="off" />
+                    </div>
+                    <fieldset data-role="controlgroup">
+                        <input type="checkbox" name="chck-rememberme" id="chck-rememberme" checked="">
+                        <label for="chck-rememberme">Se Souvenir de Moi</label>
+                    </fieldset>
+                    <a href="" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">
+                        Connectez Vous
+                    </a>
+                </form>
+
+            </div>
+
+            <!--<a href="#dlg-invalid-credentials" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">
+                Connectez Vous
+            </a>-->
+
+            <p class="mc-top-margin-1-5">
+                <a href="begin-password-reset.html">Pas possible de vous connectez?</a>
+            </p>
+            <div data-role="popup" id="dlg-invalid-credentials" data-dismissible="false" style="max-width:400px;">
+                <div role="main" class="ui-content">
+                    <h3 class="mc-text-danger">Connection &Eacute;chec</h3>
+                    <p>Le Nom Utilisateur et le Mot de Passe sont-ils correcte?</p>
+                    <div class="mc-text-center">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">
+                            OK
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div data-role="footer">
+                <h4>Copyright Fonsdom &copy; 2020</h4>
+            </div>
+        </div>
+        <div data-role="page" id="census_agent_page" class="a-page">
+            <div data-role="header" data-theme="c">
+                <a href="" data-icon="carat-l">Retour</a>
+                <h1>Espace Agent Recenseur</h1>
+                <a href="" data-icon="info" id="btn_logout">Deconnecter</a>
+            </div>
+            <div role="main" class="ui-content">
+                <h2 class="mc-text-center">Bienvenue <span id="agent_name"></span>!</h2>
+            </div>
+            <div data-role="footer">
+                <h4>Copyright Fonsdom &copy; 2020</h4>
+            </div>
+        </div>
+    </body>
+</html>

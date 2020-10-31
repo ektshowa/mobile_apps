@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+    <head>
+        <title>Recencement de la Population - Enregistrement Agent Recenseur</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static "census/css/themes/1/census-mobile-app.min.css" %}" rel="stylesheet" />
+        <link href="{% static "census/css/themes/1/jquery.mobile.icons.min.css" %}" rel="stylesheet" />
+        <link href="{% static "census/jqm/1.4.5/jquery.mobile.structure-1.4.5.min.css" %}" rel="stylesheet" />
+        <link href="{% static "census/css/app.css" %}" rel="stylesheet" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{% static "census/js/settings.js" %}" type="text/javascript"></script>
+        <script src="{% static "census/js/api-messages.js" %}" type="text/javascript"></script>
+        <script src="{% static "census/jqm/1.4.5/jquery.mobile-1.4.5.min.js" %}"></script>
+        <!--<script src="{% static "census/js/census-agent-sign-up.js" %}" type="text/javascript"></script>-->
+    </head>
+    <body>
+
+            <div data-role="page" id="agent_user" class="a-page">
+                <div data-role="header" data-theme="c">
+                    <a href="" data-icon="carat-l">Retour</a>
+                    <h1>R.D.C. Recensement</h1>
+                    <a href="" data-icon="info">Contact</a>
+                </div>
+                <div role="main" class="ui-content">
+                    <form id="agent_info" method="post" action="">
+                    <h2>Cr&eacute;ez votre compte Agent Recenseur</h2>
+
+                    <div id="ctn_err">S'il vous pla&icirc;t, compl&eacute;tez les donn&eacute;es requise</div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup"data-type="horizontal" >
+                            <legend>&Eacute;quipe en zone Urbaine/Rurale?:</legend>
+                            <input type="radio" name="zone_type" id="zone_type_urban" value="zone_type_urban" checked="checked" />
+                            <label for="zone_type_urban">Urbaine</label>
+                            <input type="radio" name="zone_type" id="zone_type_rural" value="zone_type_rural" />
+                            <label for="zone_type_rural">Rurale</label>
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="census_team" class="select">&Eacute;quipe de Recencement:</label>
+                        <p>
+                            <div class="ui-grid-a">
+                                <div class="ui-block-c" id="div_team_province">
+                                    <select name="team_province" id="team_province" class="province_choice" data-native-menu="false">
+                                        <option>Choisissez la province</option>
+                                    </select>
+                                </div>
+                                <div class="ui-block-c bi-invisible" id="div_team_territory">
+                                    <select name="team_territory" class="smallest_unit" id="team_territory" data-native-menu="false">
+                                        <option>Choisissez le territoire</option>
+                                    </select>
+                                </div>
+                                <div class="ui-block-c" id="div_team_city">
+                                    <select name="team_city" id="team_city" class="city_choice" data-native-menu="false">
+                                        <option>Choisissez la ville</option>
+                                    </select>
+                                </div>
+                                <div class="ui-block-c" id="div_team_commune">
+                                    <select name="team_commune" class="smallest_unit commune_choice" id="team_commune" data-native-menu="false">
+                                        <option>Choisissez la commune</option>
+                                    </select>
+                                </div>
+                                <div class="ui-block-c" id="div_census_team">
+                                    <select name="census_team" id="census_team">
+                                        <option value="">Choisissez votre &Eacute;quipe</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </p>
+
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="first_name">Pr&eacute;nom:</label>
+                        <input type="text" name="first_name" id="first_name" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="last_name">Nom:</label>
+                        <input type="text" name="last_name" id="last_name" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label>Courriel:</label>
+                        <input type="email" name="email" id="email" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="phone_number_1">T&eacute;l&eacute;phone Principal:</label>
+                        <input type="tel" name="phone_number_1" id="phone_number_1" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="phone_number_2">T&eacute;l&eacute;phone Secondaire:</label>
+                        <input type="tel" name="phone_number_2" id="phone_number_2" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label>Mot de Passe:</label>
+                        <input type="password" name="password" id="password" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label>Confirmez le Mot de Passe:</label>
+                        <input type="password" name="password_confirm" id="password_confirm" value="" />
+                    </div>
+
+                    <p>
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a">
+                                <a data-role="button" href="">
+                                    Annuler
+                                </a>
+                            </div>
+                            <div class="ui-block-b">
+                                <a data-role="button" href="#agent_address">
+                                    Continue
+                                </a>
+                            </div>
+                        </div>
+                    </p>
+                     </form>
+                </div>
+                <div data-role="footer">
+                    <h4>Copyright Fonsdom &copy; 2020</h4>
+                </div>
+            </div>
+            <div data-role="page" id="agent_address" class="a-page">
+                <div data-role="header" data-theme="c">
+                    <a href="#agent_user" data-icon="carat-l">Retour</a>
+                    <h1>R.D.C. Recencement</h1>
+                    <a href="" data-icon="info">Contact</a>
+                </div>
+                <div role="main" class="ui-content">
+                    <form action="" id="census_agent" method="post">
+                    <h2>Ajoutez votre Adresse</h2>
+                    <div data-role="fieldcontain">
+                        <label for="select_province">Province:</label>
+                        <select name="select_province" id="select_province" class="province_choice" data-native-menu="false">
+                            <option>Choisissez la province</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="select_city">Ville ou T&eacute;rritoire:</label>
+                        <select name="select_city" id="select_city" class="city_choice" data-native-menu="false">
+                            <option>Choisissez la ville ou t&eacute;rritoire</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="select_commune">Commune:</label>
+                        <select name="select_commune" id="select_commune" class="commune_choice" data-native-menu="false">
+                            <option>Choisissez la commune</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontain">
+                       <label for="neighborhood">Quartier:</label>
+                       <input type="text" name="neighborhood" id="neighborhood" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="street">Avenue:</label>
+                        <input type="text" name="street" id="street" value="" />
+                     </div>
+                     <div data-role="fieldcontain">
+                        <label for="house_num">Num&eacute;ro:</label>
+                        <input type="text" name="house_num" id="house_num" value="" />
+                     </div>
+                     <p>
+                         <div class="ui-grid-a">
+                             <div class="ui-block-a">
+                                 <a data-role="button" href="">
+                                     Annuler
+                                 </a>
+                             </div>
+                             <div class="ui-block-b">
+                                 <input type="submit" id="agent_sign_submit" data-theme="b" value="Cr&eacute;ez le Compte" />
+                             </div>
+                         </div>
+                     </p>
+                    </form>
+                </div>
+                <div data-role="footer">
+                    <h4>Copyright Fonsdom &copy; 2020</h4>
+                </div>
+            </div>
+        </form>
+        <div data-role="page" id="login_page" class="a-page">
+            <div data-role="header" data-theme="c">
+                <a href="" data-icon="carat-l">Retour</a>
+                <h1>R.D.C. Recensement</h1>
+                <a href="" data-icon="info">Contact</a>
+            </div>
+            <div role="main" class="ui-content">
+                <h3>Connectez-Vous</h3>
+                <form action="" method="post" id="login_form">
+                    <div data-role="fieldcontain">
+                        <label for="username">Nom d'Uilisateur</label>
+                        <input type="text" name="username" id="username" value="" />
+                    </div>
+                    <div data-role="fieldcontain">
+                        <label for="login_passowrd">Mot de Passe</label>
+                        <input type="password" name="login_password" id="login_password" value="" autocomplete="off" />
+                    </div>
+                    <fieldset data-role="controlgroup">
+                        <input type="checkbox" name="chck-rememberme" id="chck-rememberme" checked="">
+                        <label for="chck-rememberme">Se Souvenir de Moi</label>
+                    </fieldset>
+                    <a href="" id="btn-submit-login" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">
+                        Connectez Vous
+                    </a>
+                </form>
+
+            </div>
+            <p class="mc-top-margin-1-5">
+                <a href="begin-password-reset.html">Pas possible de vous connectez?</a>
+            </p>
+            <div data-role="popup" id="dlg-invalid-credentials" data-dismissible="false" style="max-width:400px;">
+                <div role="main" class="ui-content">
+                    <h3 class="mc-text-danger">Connection &Eacute;chec</h3>
+                    <p>Le Nom Utilisateur et le Mot de Passe sont-ils correcte?</p>
+                    <div class="mc-text-center">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">
+                            OK
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div data-role="footer">
+                <h4>Copyright Fonsdom &copy; 2020</h4>
+            </div>
+        </div>
+        <div data-role="page" id="census_agent_page" class="a-page">
+            <div data-role="header" data-theme="c">
+                <a href="" data-icon="carat-l">Retour</a>
+                <h1>Espace Agent Recenseur</h1>
+                <a href="" data-icon="info" id="btn_logout">D&eacute;connecter</a>
+            </div>
+            <div role="main" class="ui-content">
+                <h2 class="mc-text-center">Bienvenue <span id="agent_name"></span>!</h2>
+            </div>
+            <div data-role="footer">
+                <h4>Copyright Fonsdom &copy; 2020</h4>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+$(document).ready(function() {
+    {% block domready %}
+
+        $("input[name=zone_type]").click(function(e) {
+            var value = $("input[name=zone_type]:checked").val();
+
+            if (value == "zone_type_rural") {
+                console.log("CLICKED " + value);
+                $("#div_team_city").addClass("bi-invisible");
+                $("#div_team_commune").addClass("bi-invisible");
+                $("#div_team_territory").removeClass("bi-invisible");
+            }
+            else if (value == "zone_type_urban") {
+                console.log("CLICKED " + value);
+                $("#div_team_territory").addClass("bi-invisible");
+                $("#div_team_city").removeClass("bi-invisible");
+                $("#div_team_commune").removeClass("bi-invisible");
+            }
+        });
+
+        $.get('{% url "census:load_provinces" %}',
+            function(data) {
+                console.log(data);
+                for (var i=0; i<data.length; i++) {
+                    option_name = data[i].name;
+                    option_value = data[i].id.toString();
+                    $('<option/>').attr('value', option_value).text(option_name).appendTo('#team_province');
+                    $('<option/>').attr('value', option_value).text(option_name).appendTo('#select_province');
+                }
+                $('#team_province').selectmenu();
+                $('#team_province').selectmenu("refresh", true);
+                $('#select_province').selectmenu();
+                $('#select_province').selectmenu("refresh", true);
+         });
+
+       $(".province_choice").change(function(e) {
+            e.preventDefault();
+            var el_select = $(this).attr("id");
+            var id_parts = el_select.split("_");
+            var el_city_id = "#" + id_parts[0] + "_" + "city";
+            $("option", el_select).not(':eq(0)').remove();
+            var province_id = $(this).find(":selected").val();
+            $.get("{% url "census:load_cities_of_province" %}",
+                { province_id: province_id },
+                function(data) {
+                    //console.log("CITIES SUCCESS");
+                    //console.log(data);
+                    for (var i=0; i<data.length; i++) {
+                        option_name = data[i].name;
+                        option_value = data[i].id.toString();
+                        //var city_obj = {option_name: option_name,
+                        //                option_value: option_value};
+                        //citiesArr[i] = city_obj;
+                        //console.log("option_name="+option_name+" option_value="+option_value);
+                        $("<option/>").attr("value", option_value).text(option_name).appendTo(el_city_id);
+                    }
+                    $(el_city_id).selectmenu();
+                    $(el_city_id).selectmenu('refresh', true);
+                }
+
+            );
+        });
+
+        $(".city_choice").change(function(e) {
+            e.preventDefault();
+            var el_select = $(this).attr("id");
+            var id_parts = el_select.split("_");
+            var el_commune_id = "#" + id_parts[0] + "_" + "commune";
+            $("option", el_select).not(':eq(0)').remove();
+            var city_id = $(this).find(":selected").val();
+            $.get("{% url "census:load_communes_of_city" %}",
+                { city_id: city_id },
+                function(data) {
+                    console.log("COMMUNES SUCCESS");
+                    console.log(data);
+                    for (var i=0; i<data.length; i++) {
+                        option_name = data[i].name;
+                        option_value = data[i].id.toString();
+                        console.log("option_name="+option_name+" option_value="+option_value);
+                        $("<option/>").attr("value", option_value).text(option_name).appendTo(el_commune_id);
+                    }
+                    $(el_commune_id).selectmenu();
+                    $(el_commune_id).selectmenu('refresh', true);
+                }
+            );
+
+        });
+
+{% endblock %}
+});
+</script>

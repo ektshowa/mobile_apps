@@ -19,5 +19,7 @@ from django.urls import include, path
 urlpatterns = [
     path('uza_billet/', include('uza_billet.urls', namespace='uza_billet')),
     path('api/', include('rest_api.urls', namespace='rest_api')),
+    path('census_api/', include('census_api.urls', namespace='census_api')),
+    path('census/', include('census.urls', namespace='census')),
     path('admin/', admin.site.urls),
 ]

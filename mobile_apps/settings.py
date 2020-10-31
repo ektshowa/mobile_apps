@@ -22,6 +22,7 @@ PROJECT_ROOT = BASE_DIR = os.path.dirname(PROJECT_APP_PATH)
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'uza_billet/static'),
+    os.path.join(BASE_DIR, 'census/static'),
 ]
 
 # Quick-start development settings - unsuitable for production
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
     'shipping_management',
     'uza_billet',
     'rest_api',
+    'census_api',
+    'census',
 ]
 
 MIDDLEWARE = [
