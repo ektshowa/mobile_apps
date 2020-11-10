@@ -2,12 +2,13 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import ProvinceListAPIView, CityListAPIView, CommuneListAPIView, \
-                ResidentialSituationCodeListAPIView, \
+                ResidentialSituationCodeListAPIView, HouseholdRecordAPIView, \
                 HeadHouseholdLinkCodeListAPIView, ReligionCodeListAPIView, \
                 HandicapTypeCodeListAPIView, MarriageTypeCodeListAPIView, \
                 OccupationStatusCodeListAPIView, MarritalStatusCodeListAPIView,\
                 OccupationSituationCodeListAPIView, CensusAgentAPIView, \
-                CensusTeamListAPIView, LoginAPIView, LogoutAPIView
+                CensusTeamListAPIView, LoginAPIView, LogoutAPIView, \
+                ManageCensusAgentView
 
 
 app_name = "census_api"
@@ -35,7 +36,11 @@ urlpatterns = [
             OccupationSituationCodeListAPIView.as_view(),
             name="occup_situation_codes"),
     path('census_agents/', CensusAgentAPIView.as_view(), name='census_agents'),
+    path('census_agents_management/', ManageCensusAgentView.as_view(),
+            name="census_agents_management"),
     path('census_teams/', CensusTeamListAPIView.as_view(), name='census_teams'),
+    path('census_household_records/', HouseholdRecordAPIView.as_view(),
+            name='census_household_records'),
     path('sign_in/', LoginAPIView.as_view(), name='login'),
     path('sign_out/', LogoutAPIView.as_view(), name='logout'),
     path('api_token_auth/', obtain_auth_token, name='api_token_auth')

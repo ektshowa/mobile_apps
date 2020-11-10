@@ -24,7 +24,7 @@ from .serializers.census import ReligionCodeSerializer, \
                             MarritalStatusCodeSerializer, \
                             MarriageTypeCodeSerializer, \
                             CensusTeamSerializer
-from census.models import Province, City, CensusAgent
+from census.models import Province, City, CensusAgent, HouseholdRecord
 from census.queries_utils import ModelsQueries
 from census.utils import CensusAgentFormDataProcessing, ExtendedEncoder
 import sys
@@ -326,7 +326,7 @@ class CensusAgentAPIView(APIView):
     def post(self, request):
         print("CENSUS AGENT VIEW")
         print(request.POST)
-        address_type = request.POST.get("zone_type")[0]
+        address_type = request.POST.get("team_zone_type")[0]
         census_agent_data = {
             "phone_number_1": request.POST.get("phone_number_1"),
             "phone_number_2": request.POST.get("phone_number_2"),
@@ -410,3 +410,34 @@ class CensusAgentAPIView(APIView):
             census_agent_result = {"success": False, "data": None}
 
         return JsonResponse(census_agent_result)
+
+
+class ManageCensusAgentView(APIView):
+    queryset = CensusAgent.objects.none()
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def get(self, request):
+        agent_id = request.GET.get("id")
+        census_agent = ModelsQueries.get_census_agent_by_id(agent_id=agent_id)
+        try:
+            team_id = census_agent.census_team.id
+        except Exception:
+            team_id = None
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+
+        #census_team = ModelsQueries.get_census_team_by_id(team_id)
+        data = {"last_name": census_agent.auth_user.last_name,
+                "first_name": census_agent.auth_user.first_name,
+                "team_id": team_id}
+        return Response(data, template_name="census/census-agent-page.html")
+
+
+class HouseholdRecordAPIView(APIView):
+    queryset = HouseholdRecord.objects.none()
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def get(self, request):
+        data = {}
+        return Response(data,
+                            template_name="census/census-household-record.html")

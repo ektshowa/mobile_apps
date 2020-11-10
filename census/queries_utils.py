@@ -6,7 +6,7 @@ from census.models import Province, City, Commune, ResidentialSituationCode, \
                         HeadHouseholdLinkCode, ReligionCode, HandicapTypeCode, \
                         OccupationStatusCode, OccupationSituationCode, \
                         MarritalStatusCode, MarriageTypeCode, CensusTeam, \
-                        Address, RuralAddress
+                        Address, RuralAddress, CensusAgent
 
 import sys
 import traceback
@@ -202,9 +202,9 @@ class ModelsQueries:
             traceback.print_exception(exc_type, exc_value, exc_traceback)
         try:
             address_type = ContentType.objects.get_for_model(RuralAddress)
-            census_teams = CensusTeam.objects.filter(
-                                address_type__pk=address_type.id,
-                                object_id__in=rural_addresses)
+            census_teams = list(CensusTeam.objects.filter(
+                                content_type__pk=address_type.id,
+                                object_id__in=rural_addresses))
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
@@ -245,9 +245,10 @@ class ModelsQueries:
 
         try:
             address_type = ContentType.objects.get_for_model(Address)
-            census_teams = CensusTeam.objects.filter(
-                                address_type__pk=address_type.id,
-                                object_id__in=addresses)
+            census_teams = list(CensusTeam.objects.filter(
+                                content_type__pk=address_type.id,
+                                object_id__in=addresses).values(
+                                    "id", "name", "slug"))
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
@@ -301,3 +302,15 @@ class ModelsQueries:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
         return token
+
+    @staticmethod
+    def get_census_agent_by_id(agent_id=None):
+        if not agent_id:
+            return None
+        try:
+            agent = CensusAgent.objects.get(id=agent_id)
+        except Exception:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
+            return None
+        return agent

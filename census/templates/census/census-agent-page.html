@@ -23,7 +23,13 @@
                 <a href="" data-icon="info" id="btn_logout">Deconnecter</a>
             </div>
             <div role="main" class="ui-content">
-                <h2 class="mc-text-center">Bienvenue!</h2>
+                <h2 class="mc-text-center">Bienvenue {% if first_name %} {{ first_name }} {% endif %}!</h2>
+                <p>
+                    <a href="{% url "census_api:census_household_records" %}" class="ui-btn ui-btn-b ui-corner-all">
+                        Ajoutez un m&eacute;nage
+                    </a>
+                </p>
+
             </div>
         </div>
     </body>

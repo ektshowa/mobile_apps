@@ -12,4 +12,6 @@ urlpatterns = [
                                             name="load_cities_of_province"),
     url(r"^web-communes-of-city/$", views.load_communes_of_city,
                                             name="load_communes_of_city"),
+    url(r"^web-censusteam-of-commune/$", views.load_census_teams,
+                                            name="load_census_teams"),
 ]

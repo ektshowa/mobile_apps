@@ -16,7 +16,7 @@
         <!--<script src="{% static "census/js/census-agent-sign-up.js" %}" type="text/javascript"></script>-->
     </head>
     <body>
-
+        <form id="create_agent" method="" action="">
             <div data-role="page" id="agent_user" class="a-page">
                 <div data-role="header" data-theme="c">
                     <a href="" data-icon="carat-l">Retour</a>
@@ -24,16 +24,15 @@
                     <a href="" data-icon="info">Contact</a>
                 </div>
                 <div role="main" class="ui-content">
-                    <form id="agent_info" method="post" action="">
                     <h2>Cr&eacute;ez votre compte Agent Recenseur</h2>
 
                     <div id="ctn_err">S'il vous pla&icirc;t, compl&eacute;tez les donn&eacute;es requise</div>
                     <div data-role="fieldcontain">
                         <fieldset data-role="controlgroup"data-type="horizontal" >
                             <legend>&Eacute;quipe en zone Urbaine/Rurale?:</legend>
-                            <input type="radio" name="zone_type" id="zone_type_urban" value="zone_type_urban" checked="checked" />
+                            <input type="radio" name="team_zone_type" id="zone_type_urban" value="zone_type_urban" checked="checked" />
                             <label for="zone_type_urban">Urbaine</label>
-                            <input type="radio" name="zone_type" id="zone_type_rural" value="zone_type_rural" />
+                            <input type="radio" name="team_zone_type" id="zone_type_rural" value="zone_type_rural" />
                             <label for="zone_type_rural">Rurale</label>
                         </fieldset>
                     </div>
@@ -113,7 +112,7 @@
                             </div>
                         </div>
                     </p>
-                     </form>
+
                 </div>
                 <div data-role="footer">
                     <h4>Copyright Fonsdom &copy; 2020</h4>
@@ -126,7 +125,6 @@
                     <a href="" data-icon="info">Contact</a>
                 </div>
                 <div role="main" class="ui-content">
-                    <form action="" id="census_agent" method="post">
                     <h2>Ajoutez votre Adresse</h2>
                     <div data-role="fieldcontain">
                         <label for="select_province">Province:</label>
@@ -170,7 +168,6 @@
                              </div>
                          </div>
                      </p>
-                    </form>
                 </div>
                 <div data-role="footer">
                     <h4>Copyright Fonsdom &copy; 2020</h4>
@@ -242,8 +239,8 @@
 $(document).ready(function() {
     {% block domready %}
 
-        $("input[name=zone_type]").click(function(e) {
-            var value = $("input[name=zone_type]:checked").val();
+        $("input[name=team_zone_type]").click(function(e) {
+            var value = $("input[name=team_zone_type]:checked").val();
 
             if (value == "zone_type_rural") {
                 console.log("CLICKED " + value);
@@ -325,6 +322,53 @@ $(document).ready(function() {
                 }
             );
 
+        });
+
+        $("#team_commune").change(function(e) {
+            e.preventDefault();
+            var province_id = $("#team_province").val();
+            var city_id = $("#team_city").val();
+            var commune_id = $("#team_commune").val();
+            var el_select = "#census_team";
+            $("option", el_select).not(':eq(0)').remove();
+            $.get("{% url "census:load_census_teams" %}",
+                { province_id: province_id,
+                  city_id : city_id,
+                  commune_id : commune_id },
+                function(data) {
+                    console.log("CENSUS TEAMS SUCCESS");
+                    console.log(data);
+                    for (var i=0; i<data.length; i++) {
+                        option_name = data[i].name;
+                        option_value = data[i].id.toString();
+                        console.log("option_name="+option_name+" option_value="+option_value);
+                        $("<option/>").attr("value", option_value).text(option_name).appendTo(el_select);
+                    }
+                    $(el_select).selectmenu();
+                    $(el_select).selectmenu('refresh', true);
+                });
+        });
+
+        $("#agent_sign_submit").click(function(e) {
+            e.preventDefault();
+            var form_data = $("form#create_agent").serializeArray().reduce(
+                function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+            }, {});
+            console.log(form_data);
+            $.ajax({
+                url: "{% url 'census_api:census_agents' %}",
+                type: "post",
+                data: form_data,
+                dataType: "json",
+                success: function(json) {
+                    console.log(json.data);
+                    alert(json.data);
+                    var id = json.data.id;
+                    window.location.replace("{% url 'census_api:census_agents_management' %}" + "?id="+id);
+                }
+            });
         });
 
 {% endblock %}

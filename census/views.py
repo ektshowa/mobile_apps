@@ -36,6 +36,22 @@ def load_communes_of_city(request):
         communes = []
     return JsonResponse(communes, safe=False)
 
+
+@require_GET
+def load_census_teams(request):
+    province_id = request.GET.get("province_id")
+    city_id = request.GET.get("city_id")
+    commune_id = request.GET.get("commune_id")
+    census_teams = ModelsQueries.get_census_team_by_province_city_commune(
+                        province_id=province_id,
+                        city_id=city_id,
+                        commune_id=commune_id)
+    print("PRINTING CENSUS_TEAMS")
+    print(census_teams)
+    if not census_teams:
+        census_teams = []
+    return JsonResponse(census_teams, safe=False)
+
 """
 def load_cities_of_region(request):
     region_id = request.POST.get("id")

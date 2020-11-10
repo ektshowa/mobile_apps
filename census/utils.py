@@ -2,10 +2,12 @@
 from django.forms import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
+from django.contrib.auth.models import User
+from census.models import Address
 from census_api.serializers.core import AddressSerializer, UserSerializer, \
-                                RuralAddress
+                                RuralAddressSerializer
 from census_api.serializers.census import CensusAgentSerializer
-from .models import Address
+from .models import Address, RuralAddress, CensusAgent
 from .queries_utils import ModelsQueries
 
 import sys, traceback
@@ -41,7 +43,7 @@ class CensusAgentFormDataProcessing:
         address = {}
 
         if data:
-            address_type = data.get("zone_type", "")
+            address_type = data.get("agent_zone_type", "")
             if not address_type or address_type == "zone_type_urban":
                 address = {
                         "zone_type": "zone_type_urban",
@@ -92,7 +94,8 @@ class CensusAgentFormDataProcessing:
                 "address_type": data.get("address_type", "")}
         return agent
 
-    def save_address(self, **form_data):
+    def save_address(self, request_type="api", **form_data):
+        #request_type can be "api" or "web"
         data = self._get_address_data(**form_data)
         print("PRINTING ADDRESS DATA")
         print(data)
@@ -118,39 +121,71 @@ class CensusAgentFormDataProcessing:
             more_data = {"province": province,
                         "city": city,
                         "commune": commune}
-            serializer = AddressSerializer(data=address_data)
-            print("SERIALIZER IN SAVE ADDRESS")
-            print(serializer.__dict__)
+            if request_type == "api":
+                serializer = AddressSerializer(data=address_data)
+                print("SERIALIZER IN SAVE ADDRESS")
+                print(serializer.__dict__)
 
-            if serializer.is_valid():
-                address_saved = serializer.save(more_data=more_data)
-            else:
-                print("PRINT SAVE ADDRESS ERROR")
-                print(serializer.errors)
-                data = serializer.errors
-                result = {"success": False, "data": data}
-
+                if serializer.is_valid():
+                    address_saved = serializer.save(more_data=more_data)
+                else:
+                    print("PRINT SAVE ADDRESS ERROR")
+                    print(serializer.errors)
+                    data = serializer.errors
+                    result = {"success": False, "data": data}
+            elif request_type == "web":
+                try:
+                    address = Address()
+                    address.house_num = house_num
+                    address.street = street
+                    address.neighborhood = neighborhood
+                    address.province = province
+                    address.city = city
+                    address.commune = commune
+                    address.save()
+                    address_saved = address
+                except Exception:
+                    address_saved = None
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    traceback.print_exception(exc_type, exc_value,
+                                                                exc_traceback)
         elif address_type == "zone_type_rural":
             village_name = data.get("village_name", "")
             sector = data.get("sector", "")
             territory = data.get("territory", "")
             district = data.get("district", "")
 
-            address_data = {"village_name": village_name,
-                            "sector": sector,
-                            "territory": territory,
-                            "district": district}
-            serializer = RuralAddress(data=address_data)
-            print("SERIALIZER IN SAVE RURAL ADDRESS")
-            print(serializer.__dict__)
+            if request_type == "api":
+                address_data = {"village_name": village_name,
+                                "sector": sector,
+                                "territory": territory,
+                                "district": district}
+                serializer = RuralAddress(data=address_data)
+                print("SERIALIZER IN SAVE RURAL ADDRESS")
+                print(serializer.__dict__)
 
-            if serializer.is_valid():
-                address_saved = serializer.save(province=province)
-            else:
-                print("PRINT SAVE ADDRESS ERROR")
-                print(serializer.errors)
-                data = serializer.errors
-                result = {"success": False, "data": data}
+                if serializer.is_valid():
+                    address_saved = serializer.save(province=province)
+                else:
+                    print("PRINT SAVE ADDRESS ERROR")
+                    print(serializer.errors)
+                    data = serializer.errors
+                    result = {"success": False, "data": data}
+            elif request_type == "web":
+                try:
+                    rural_address = RuralAddress()
+                    rural_address.village_name = village_name
+                    rural_address.sector = sector
+                    rural_address.territory = territory
+                    rural_address.district = district
+                    rural_address.province = province
+                    rural_address.save()
+                    address_saved = None
+                except Exception:
+                    address_saved = None
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    traceback.print_exception(exc_type, exc_value,
+                                                                exc_traceback)
 
         if address_saved:
             result = {"success": True, "data": address_saved}
@@ -161,7 +196,7 @@ class CensusAgentFormDataProcessing:
 
         return result
 
-    def save_agent_user(self, **form_data):
+    def save_agent_user(self, request_type="api", **form_data):
         user_agent_data = self._get_agent_user_data(**form_data)
         print("PRINTING AGENT USER DATA")
         print(user_agent_data)
@@ -205,7 +240,7 @@ class CensusAgentFormDataProcessing:
                         "username": agent_saved.auth_user.username,
                         "phone_number": agent_saved.phone_number_1,
                         "census_team": agent_saved.census_team.id,
-                        "auth_token": user_auth_token.key
+                        #"auth_token": user_auth_token.key
                     }
                 result = {"success": True, "data": result_data}
             else:

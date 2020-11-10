@@ -5,7 +5,8 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, \
+                                                GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from .abstract_models import AbstractPhoneNumberFields,\
                             AbstractTimeStampedModel, AbstractNameFieldsModel
@@ -101,75 +102,6 @@ class Commune(AbstractTimeStampedModel, AbstractNameFieldsModel):
         verbose_name = _("Commune")
 
 
-class Address(models.Model):
-    house_num = models.CharField(_("Numéro"), max_length=5, blank=True)
-    street = models.CharField(_("Avenue"), max_length=200, blank=True)
-    province = models.ForeignKey(Province,
-                            related_name="province_address",
-                            on_delete=models.CASCADE,
-                            db_index=True,
-                            verbose_name=_("Province"),
-                            blank=True)
-    city = models.ForeignKey(City,
-                            related_name="city_address",
-                            on_delete=models.CASCADE,
-                            db_index=True,
-                            verbose_name=_("Ville/District"),
-                            blank=True)
-    commune = models.ForeignKey(Commune,
-                            related_name="commune_address",
-                            on_delete=models.CASCADE,
-                            db_index=True,
-                            verbose_name=_("Commune"),
-                            blank=True)
-    neighborhood = models.CharField(_("Quartier"), max_length=200, blank=True)
-    country = models.CharField(_("Pays"), max_length=50, default="R.D. Congo")
-
-    def __repr__(self):
-        return "street: %s, city %s, commune: %s, region: %s" % \
-                    (self.street, self.city.name,
-                    self.commune.name, self.province.name)
-
-    def __str__(self):
-        return self.street + " " + self.commune.name + self.city.name + " " + \
-                                                            self.province.name
-
-    class Meta:
-        verbose_name = _("Adresse")
-        verbose_name_plural = _("Adresses")
-
-
-class RuralAddress(AbstractTimeStampedModel):
-    village_name = models.CharField(_("Village"),
-                                max_length=255,
-                                blank=True)
-    sector = models.CharField(_("Secteur"),
-                                max_length=255,
-                                blank=True)
-    territory = models.CharField(_("Térritoire"),
-                                max_length=255,
-                                blank=True)
-    district = models.CharField(_("District"),
-                                max_length=255,
-                                blank=True)
-    province = models.ForeignKey(Province,
-                            related_name="province_ruraladdress",
-                            on_delete=models.CASCADE,
-                            db_index=True,
-                            verbose_name=_("Province"),
-                            blank=True)
-
-    def __repr__(self):
-        return "Village ID: %s Name: %s" % (self.id, self.village_name)
-
-    def __str__(self):
-        return "Village ID: %s Name: %s" % (self.id, self.village_name)
-
-    class Meta:
-        verbose_name = _("Adresse Milieu Rural")
-        verbose_name_plural = _("Adresses Milieux Ruraux")
-
-
 class ResidentialSituationCode(AbstractTimeStampedModel,
                                                     AbstractNameFieldsModel):
     def save(self, *args, **kwargs):
@@ -237,7 +169,7 @@ class CensusTeam(AbstractTimeStampedModel, AbstractNameFieldsModel,
                                 db_index=True,
                                 verbose_name=_("Adresse"),
                                 blank=True)"""
-    address_type = models.ForeignKey(ContentType,
+    content_type = models.ForeignKey(ContentType,
                 on_delete=models.CASCADE,
                 null=True,
                 blank=True,
@@ -246,7 +178,12 @@ class CensusTeam(AbstractTimeStampedModel, AbstractNameFieldsModel,
                 null=True,
                 blank=True,
                 db_index=True)
-    address_object = GenericForeignKey('address_type', 'object_id')
+    address_object = GenericForeignKey('content_type', 'object_id')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._get_slug()
+        super(CensusTeam, self).save(*args, **kwargs)
 
 
 class CensusAgent(AbstractTimeStampedModel, AbstractPhoneNumberFields):
@@ -266,7 +203,7 @@ class CensusAgent(AbstractTimeStampedModel, AbstractPhoneNumberFields):
                                 verbose_name=_("Équipe"),
                                 blank=True)
     is_manager = models.BooleanField(_("Est Chef d'Équipe?"), default=False)
-    address_type = models.ForeignKey(ContentType,
+    content_type = models.ForeignKey(ContentType,
                 on_delete=models.CASCADE,
                 null=True,
                 blank=True,
@@ -275,7 +212,7 @@ class CensusAgent(AbstractTimeStampedModel, AbstractPhoneNumberFields):
                 null=True,
                 blank=True,
                 db_index=True)
-    address_object = GenericForeignKey('address_type', 'object_id')
+    address_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
         return "Personne: %s %s" % (self.auth_user.first_name,
@@ -426,16 +363,16 @@ class Individual(AbstractTimeStampedModel, AbstractPhoneNumberFields):
                                 db_index=True,
                                 verbose_name=_("Questionnaire Ménage"),
                                 blank=True)
-    address_type = models.ForeignKey(ContentType,
+    content_type = models.ForeignKey(ContentType,
                 on_delete=models.CASCADE,
                 null=True,
                 blank=True,
                 related_name="individual_object_address_type")
-    address_object_id = models.PositiveIntegerField(
+    object_id = models.PositiveIntegerField(
                 null=True,
                 blank=True,
                 db_index=True)
-    address_object = GenericForeignKey('address_type', 'address_object_id')
+    address_object = GenericForeignKey('content_type', 'object_id')
     place_of_birth_type = models.ForeignKey(ContentType,
                 on_delete=models.CASCADE,
                 null=True,
@@ -455,6 +392,90 @@ class Individual(AbstractTimeStampedModel, AbstractPhoneNumberFields):
     def __repr__(self):
         return "Personne: %s %s" % (self.auth_user.first_name,
                                                     self.auth_user.last_name)
+
+
+class Address(models.Model):
+    house_num = models.CharField(_("Numéro"), max_length=5, blank=True)
+    street = models.CharField(_("Avenue"), max_length=200, blank=True)
+    province = models.ForeignKey(Province,
+                            related_name="province_address",
+                            on_delete=models.CASCADE,
+                            db_index=True,
+                            verbose_name=_("Province"),
+                            blank=True)
+    city = models.ForeignKey(City,
+                            related_name="city_address",
+                            on_delete=models.CASCADE,
+                            db_index=True,
+                            verbose_name=_("Ville/District"),
+                            blank=True)
+    commune = models.ForeignKey(Commune,
+                            related_name="commune_address",
+                            on_delete=models.CASCADE,
+                            db_index=True,
+                            verbose_name=_("Commune"),
+                            blank=True)
+    neighborhood = models.CharField(_("Quartier"), max_length=200, blank=True)
+    country = models.CharField(_("Pays"), max_length=50, default="R.D. Congo")
+    census_teams = GenericRelation(CensusTeam)
+    census_agents = GenericRelation(CensusAgent)
+    household_records = GenericRelation(HouseholdRecord)
+    individual_addresses = GenericRelation(Individual)
+    """
+    FOR INDIVIDUAL PLACE OF BIRTH DO THIS
+    individual_places_of_birth = GenericRelation(
+                        object_id_field="place_of_birth_object_id",
+                        content_type_field="place_of_birth_type")
+    """
+
+    def __repr__(self):
+        return "street: %s, city %s, commune: %s, region: %s" % \
+                    (self.street, self.city.name,
+                    self.commune.name, self.province.name)
+
+    def __str__(self):
+        return self.street + " " + self.commune.name + self.city.name + " " + \
+                                                            self.province.name
+
+    class Meta:
+        verbose_name = _("Adresse")
+        verbose_name_plural = _("Adresses")
+
+
+class RuralAddress(AbstractTimeStampedModel):
+    village_name = models.CharField(_("Village"),
+                                max_length=255,
+                                blank=True)
+    sector = models.CharField(_("Secteur"),
+                                max_length=255,
+                                blank=True)
+    territory = models.CharField(_("Térritoire"),
+                                max_length=255,
+                                blank=True)
+    district = models.CharField(_("District"),
+                                max_length=255,
+                                blank=True)
+    province = models.ForeignKey(Province,
+                            related_name="province_ruraladdress",
+                            on_delete=models.CASCADE,
+                            db_index=True,
+                            verbose_name=_("Province"),
+                            blank=True)
+    census_teams = GenericRelation(CensusTeam)
+    census_agents = GenericRelation(CensusAgent)
+    household_records = GenericRelation(HouseholdRecord)
+    individual_addresses = GenericRelation(Individual)
+
+    def __repr__(self):
+        return "Village ID: %s Name: %s" % (self.id, self.village_name)
+
+    def __str__(self):
+        return "Village ID: %s Name: %s" % (self.id, self.village_name)
+
+    class Meta:
+        verbose_name = _("Adresse Milieu Rural")
+        verbose_name_plural = _("Adresses Milieux Ruraux")
+
 
 """
 @receiver(post_save, sender=User, dispatch_uid="create_user_auth_token")
