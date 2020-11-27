@@ -94,10 +94,16 @@ var elements_id = {
 var index = 1;
 
 ResidentRecord.get_record_html = function(indice) {
+        if (indice > 2) {
+            var retour_id = "household_resident-${indice-1}";
+        }
+        else if (indice == 1) {
+            var retour_id = "#household_address";
+        }
         var record_html = `
             <div data-role="page" id="household_resident-${indice}" class="a-page resident_info">
                 <div data-role="header" data-theme="c">
-                    <a href="" data-icon="carat-l">Retour</a>
+                    <a href="${retour_id}" data-icon="carat-l">Retour</a>
                         <h1>R.D.C. Recensement</h1>
                     <a href="" data-icon="info">Contact</a>
                 </div>

@@ -12,7 +12,7 @@
         <script src="{% static "census/js/settings.js" %}" type="text/javascript"></script>
         <script src="{% static "census/js/api-messages.js" %}" type="text/javascript"></script>
         <script src="{% static "census/jqm/1.4.5/jquery.mobile-1.4.5.min.js" %}"></script>
-        <script src="{% static "census/js/sign-in.js" %}" type="text/javascript"></script>
+        <!--<script src="{% static "census/js/sign-in.js" %}" type="text/javascript"></script>-->
     </head>
     <body>
         <div data-role="page" id="login_page" class="a-page">
@@ -24,6 +24,7 @@
             <div role="main" class="ui-content">
                 <h3>Connectez-Vous</h3>
                 <form action="" method="post">
+                    {% csrf_token %}
                     <div data-role="fieldcontain">
                         <label for="username">Nom d'Uilisateur</label>
                         <input type="text" name="username" id="username" value="" />
@@ -80,3 +81,46 @@
         </div>
     </body>
 </html>
+
+<script>
+
+$(document).ready(function () {
+
+{% block domready %}
+
+$("#btn-submit").click(function(e) {
+        e.preventDefault();
+        var form_data = $("form").serializeArray().reduce(
+            function(obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+        var csrf_token = $("form").find('input[name=csrfmiddlewaretoken]').val();
+        form_data["csrfmiddlewaretoken"] = csrf_token;
+        console.log(form_data);
+        $.ajax({
+            url: "{% url 'census:web_login' %}",
+            type: "post",
+            data: form_data,
+            dataType: "json",
+            success: function(resp) {
+                console.log("CHANGE PAGE ONE");
+                console.log(resp);
+                //$.mobile.navigate("#census_agent_page");
+                console.log("CHANGE PAGE");
+                ////$.mobile.changePage("census-agent-page.html");
+                var json_data = JSON.parse(resp.data);
+                console.log(json_data);
+                var id = json_data.id;
+                console.log("FOUND ID " + id);
+                window.location.replace("{% url 'census_api:census_agents_management' %}" + "?id="+id);
+                //return;
+            }
+        });
+    });
+
+{% endblock %}
+
+});
+
+</script>

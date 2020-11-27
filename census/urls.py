@@ -14,4 +14,6 @@ urlpatterns = [
                                             name="load_communes_of_city"),
     url(r"^web-censusteam-of-commune/$", views.load_census_teams,
                                             name="load_census_teams"),
+    url(r"^web-login/$", views.login_view, name="web_login"),
+    url(r"^web-logout/$", views.logout_view, name="web_logout"),
 ]

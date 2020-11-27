@@ -5,6 +5,7 @@ import json
 from django.http import JsonResponse
 from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
+from django.views.decorators.csrf import csrf_protect
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import ListAPIView
@@ -12,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import authentication, permissions
+from rest_framework import permissions, authentication
 from .serializers.core import ProvinceSerializer, CitySerializer,\
                             CommuneSerializer
 from .serializers.census import ReligionCodeSerializer, \
@@ -29,6 +30,7 @@ from census.queries_utils import ModelsQueries
 from census.utils import CensusAgentFormDataProcessing, ExtendedEncoder
 import sys
 import traceback
+
 
 
 def authenticate(username=None, password=None):
@@ -314,6 +316,44 @@ class LogoutAPIView(APIView):
         return JsonResponse({"data": True})
 
 
+@csrf_protect
+def login_view(request):
+    print("LOGIN VIEW USER")
+    print(request.user)
+
+    if request.user.is_authenticated:
+        print("USER AUTHENTICATED")
+        return JsonResponse({"data": None, "err_code": 17})
+
+    username = request.POST.get("username", "")
+    password = request.POST.get("password", "")
+    print("USERNAME AND PASSWORD")
+    print("username: %s password: %s" % (username, password))
+    user = authenticate(username=username, password=password)
+    err_code = ""
+
+    if user is None:
+        err_code = 1
+        data = None
+    elif not user.is_active:
+        err_code = 16
+        data = None
+    else:
+        login(request, user)
+        data = user
+    if data:
+        data = json.dumps(data, cls=ExtendedEncoder)
+
+    #return JsonResponse(data, encoder=ExtendedEncoder)
+    return JsonResponse({"data": data, "err_code": err_code})
+
+
+def logout_view(request):
+    logout(request)
+    print("USER DECONNECTION")
+    return JsonResponse({"data": True})
+
+
 class CensusAgentAPIView(APIView):
     queryset = CensusAgent.objects.none()
     renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
@@ -427,9 +467,12 @@ class ManageCensusAgentView(APIView):
             traceback.print_exception(exc_type, exc_value, exc_traceback)
 
         #census_team = ModelsQueries.get_census_team_by_id(team_id)
-        data = {"last_name": census_agent.auth_user.last_name,
-                "first_name": census_agent.auth_user.first_name,
-                "team_id": team_id}
+        if census_agent:
+            data = {"last_name": census_agent.auth_user.last_name,
+                    "first_name": census_agent.auth_user.first_name,
+                    "team_id": team_id}
+        else:
+            data = {}
         return Response(data, template_name="census/census-agent-page.html")
 
 

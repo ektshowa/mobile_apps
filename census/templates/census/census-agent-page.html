@@ -34,3 +34,30 @@
         </div>
     </body>
 </html>
+
+<script>
+
+$(document).ready(function () {
+
+{% block domready %}
+
+    $("#btn_logout").click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{% url 'census:web_logout' %}",
+            type: "get",
+            success: function(resp) {
+                console.log("LOGGED OUT");
+                console.log(resp);
+                //$.mobile.navigate("#login_page");
+                //return;
+                window.location.replace("{% url 'census_api:login' %}");
+            }
+        });
+    });
+
+{% endblock %}
+
+});
+
+</script>

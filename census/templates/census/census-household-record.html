@@ -19,7 +19,7 @@
         <form action="" method="post">
             <div data-role="page" id="household_rec" class="a-page">
                 <div data-role="header" data-theme="c">
-                    <a href="" data-icon="carat-l">Retour</a>
+                    <a href="{% url 'census:index' %}" data-icon="carat-l">Retour</a>
                     <h1>R.D.C. Recensement</h1>
                     <a href="" data-icon="info">Contact</a>
                 </div>
@@ -122,7 +122,7 @@
                                 <label for="female_present_resident_num">
                                     F&eacute;minin:
                                 </label>
-                                <input type="text" name="male_present_resident_num" id="male_present_resident_num" value="" />
+                                <input type="text" name="female_present_resident_num" id="female_present_resident_num" value="" />
                             </div>
                         </div>
                     </p>
@@ -139,7 +139,7 @@
                                 <label for="female_absent_resident_num">
                                     F&eacute;minin:
                                 </label>
-                                <input type="text" name="male_absent_resident_num" id="male_absent_resident_num" value="" />
+                                <input type="text" name="female_absent_resident_num" id="female_absent_resident_num" value="" />
                             </div>
                         </div>
                     </p>
@@ -239,34 +239,34 @@
             </div>
             <div data-role="page" id="household_resident" class="a-page resident_info">
                 <div data-role="header" data-theme="c">
-                    <a href="" data-icon="carat-l">Retour</a>
+                    <a href="#household_address" data-icon="carat-l">Retour</a>
                         <h1>R.D.C. Recensement</h1>
                     <a href="" data-icon="info">Contact</a>
                 </div>
                 <div role="main" class="ui-content">
                     <h2>R&eacute;sidents du M&eacute;nage</h2>
                     <h4>Personne 1</h4>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="first_name">Pr&eacute;nom:</label>
                         <input type="text" name="first_name" id="first_name" value="" />
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="last_name">Nom:</label>
                         <input type="text" name="last_name" id="last_name" value="" />
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="head_household_link">Lien avec le Chef de M&eacute;nage:</label>
                         <select name="head_household_link" id="head_household_link" data-native-menu="false">
                             <option>Choisissez le lien avec le Chef de M&eacute;nage </option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="marrital_status">Statut matrimonial:</label>
                         <select name="marrital_status" id="marrital_status" class="marr_status" data-native-menu="false">
                             <option>Choisissez le statut matrimonial</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="marriage_type">Type de mariage:</label>
                         <select name="marriage_type" id="marriage_type" class="marr_type" data-native-menu="false">
                             <option>Choisissez le type de mariage</option>
@@ -348,7 +348,7 @@
                         Lieu de Naissance
                         <div class="ui-grid-a">
                             <div class="ui-block-b">
-                                <div data-role="fieldcontain">
+                                <div class="ui-field-contain">
                                     <fieldset data-role="controlgroup"data-type="horizontal" >
                                         <!--<legend>&Eacute;quipe en zone Urbaine/Rurale?:</legend>-->
                                         <input type="radio" name="zone_type" id="zone_type_urban" value="zone_type_urban" checked="checked" />
@@ -404,35 +404,35 @@
                             </div>
                         </div>
                     </p>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="highest_diploma">Plus haut dipl&ocirc;me obtenu:</label>
                         <select name="highest_diploma" id="highest_diploma" data-native-menu="false">
                             <option>Choisissez le dipl&ocirc;me</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="occupation_status">Status de l'emploi:</label>
                         <select name="occupation_status" id="occupation_status" data-native-menu="false">
                             <option>Choisissez le status de l'emploi</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="occupation_situation">Situation de l'emploi:</label>
                         <select name="occupation_situation" id="occupation_situation" data-native-menu="false">
                             <option>Choisissez la situation de l'emploi</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="occupation">Occupation:</label>
                         <input type="text" name="occupation" id="occupation" value="" />
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="religion">Religion:</label>
                         <select name="religion" id="religion" data-native-menu="false">
                             <option>Choisissez la religion</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div class="ui-field-contain">
                         <label for="handicap">Type de l'handicap:</label>
                         <select name="handicap" id="handicap" data-native-menu="false">
                             <option>Choisissez le type d'handicap</option>
@@ -472,33 +472,78 @@ $(document).ready(function () {
 
 {% block domready %}
 
+$("input[name=zone_type]").click(function(e) {
+    var value = $("input[name=zone_type]:checked").val();
+
+    if (value == "zone_type_rural") {
+        console.log("CLICKED " + value);
+        $("#div_birth_city").addClass("bi-invisible");
+        $("#div_birth_commune").addClass("bi-invisible");
+        $("#div_birth_territory").removeClass("bi-invisible");
+    }
+    else if (value == "zone_type_urban") {
+        console.log("CLICKED " + value);
+        $("#div_birth_territory").addClass("bi-invisible");
+        $("#div_birth_city").removeClass("bi-invisible");
+        $("#div_birth_commune").removeClass("bi-invisible");
+    }
+});
+
+$(document).on("click", "input[name=zone_type-1]", function(e) {
+    var value = $("input[name=zone_type-1]:checked").val();
+
+    if (value == "zone_type_rural") {
+        console.log("CLICKED " + value);
+        $("#div_birth_city").addClass("bi-invisible");
+        $("#div_birth_commune").addClass("bi-invisible");
+        $("#div_birth_territory").removeClass("bi-invisible");
+    }
+    else if (value == "zone_type_urban") {
+        console.log("CLICKED " + value);
+        $("#div_birth_territory").addClass("bi-invisible");
+        $("#div_birth_city").removeClass("bi-invisible");
+        $("#div_birth_commune").removeClass("bi-invisible");
+    }
+});
+
+$(document).on("click", "input[name=zone_type-2]", function(e) {
+    var value = $("input[name=zone_type-2]:checked").val();
+
+    if (value == "zone_type_rural") {
+        console.log("CLICKED " + value);
+        $("#div_birth_city").addClass("bi-invisible");
+        $("#div_birth_commune").addClass("bi-invisible");
+        $("#div_birth_territory").removeClass("bi-invisible");
+    }
+    else if (value == "zone_type_urban") {
+        console.log("CLICKED " + value);
+        $("#div_birth_territory").addClass("bi-invisible");
+        $("#div_birth_city").removeClass("bi-invisible");
+        $("#div_birth_commune").removeClass("bi-invisible");
+    }
+});
+
+
+
 CensusHouseholdRecord.get_provinces_choices("select_province", "{% url 'census_api:provinces' %}");
 
 CensusHouseholdRecord.get_provinces_choices("birth_province", "{% url 'census_api:provinces' %}");
 
-// Set head household links choices for the first resident
 ResidentRecord.get_head_household_link_choices("", "{% url 'census_api:head_household_links' %}");
 
-// Set marrital status codes choices
 ResidentRecord.get_marrital_status_choices("", "{% url 'census_api:marrital_status_codes' %}");
 
-// Set marrital type choices
 ResidentRecord.get_marrital_type_choices("", "{% url 'census_api:marriage_type_codes' %}");
 
-// Set highest diploma choices
-//ResidentRecord.get_highest_diploma_choices("");
+{# ResidentRecord.get_highest_diploma_choices(""); #}
 
-// Set occupation status choices
 ResidentRecord.get_occupation_status_choices("", "{% url 'census_api:occup_status_codes' %}");
 
-// Set occupation situation choices
 ResidentRecord.get_occupation_situation_choices("", "{% url 'census_api:occup_situation_codes' %}");
 
-// Set religion choices
 ResidentRecord.get_religion_choices("", "{% url 'census_api:religion_codes' %}");
 
-// Set handicap choices
-//ResidentRecord.get_handicap_choices("");
+{# ResidentRecord.get_handicap_choices(""); #}
 
 $(document).on("click", ".more_resident", function(ev) {
         ev.preventDefault();

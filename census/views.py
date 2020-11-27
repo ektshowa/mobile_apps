@@ -1,8 +1,30 @@
+import json
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.contrib.auth import login, logout
+from django.contrib.auth.hashers import check_password
+from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_GET
 from django.template.response import TemplateResponse
 from .queries_utils import ModelsQueries
+from .utils import ExtendedEncoder
+
+
+def authenticate(username=None, password=None):
+    result = None
+    user = ModelsQueries.get_user_by_username(username)
+    is_active = False
+    try:
+        is_active = user.is_active
+    except Exception:
+        pass
+    print("AUTHENTICATE USER")
+    print(user)
+    if not user or not is_active:
+        return None
+    pwd_is_valid = check_password(password, user.password)
+    result = user if pwd_is_valid else None
+    return result
 
 
 def index(request, template="census/index.html", extra_context=None):
@@ -51,6 +73,48 @@ def load_census_teams(request):
     if not census_teams:
         census_teams = []
     return JsonResponse(census_teams, safe=False)
+
+
+@csrf_protect
+def login_view(request):
+    print("LOGIN VIEW USER")
+    print(request.user)
+
+    if request.user.is_authenticated:
+        print("USER AUTHENTICATED")
+        data = json.dumps(request.user, cls=ExtendedEncoder)
+        return JsonResponse({"data": data, "err_code": 17})
+
+    username = request.POST.get("username", "")
+    password = request.POST.get("password", "")
+    print("USERNAME AND PASSWORD")
+    print("username: %s password: %s" % (username, password))
+    user = authenticate(username=username, password=password)
+    err_code = ""
+
+    if user is None:
+        err_code = 1
+        data = None
+    elif not user.is_active:
+        err_code = 16
+        data = None
+    else:
+        login(request, user)
+        data = user
+    if data:
+        data = json.dumps(data, cls=ExtendedEncoder)
+
+    #return JsonResponse(data, encoder=ExtendedEncoder)
+    return JsonResponse({"data": data, "err_code": err_code})
+
+
+def logout_view(request):
+    logout(request)
+    print("USER DECONNECTION")
+    return JsonResponse({"data": True})
+
+
+
 
 """
 def load_cities_of_region(request):
