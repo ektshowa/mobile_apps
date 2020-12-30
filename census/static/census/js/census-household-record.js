@@ -121,19 +121,44 @@ ResidentRecord.get_record_html = function(indice) {
                     <div data-role="fieldcontain">
                         <label for="head_household_link-${indice}">Lien avec le Chef de M&eacute;nage:</label>
                         <select name="head_household_link-${indice}" id="head_household_link-${indice}" class="head_link" data-native-menu="false">
-                            <option>Choisissez le lien avec le Chef de M&eacute;nage </option>
+                            <option>Choisissez le lien avec le Chef de M&eacute;nage</option>
+                            <option value="1">Chef de Ménage</option>
+                            <option value="2">Conjoint du Chef de Ménage</option>
+                            <option value="3">Père ou Mère</option>
+                            <option value="4">Fils ou Fille</option>
+                            <option value="5">Frère ou Soeur</option>
+                            <option value="6">Neveu ou Nièce</option>
+                            <option value="7">Autre Parent</option>
+                            <option value="8">Aucun Lien</option>
                         </select>
+
                     </div>
                     <div data-role="fieldcontain">
                         <label for="marrital_status-${indice}">Statut matrimonial:</label>
                         <select name="marrital_status-${indice}" id="marrital_status-${indice}" class="marr_status" data-native-menu="false">
                             <option>Choisissez le statut matrimonial</option>
+                            <option value="1">Célibataire</option>
+                            <option value="2">Union Libre</option>
+                            <option value="3">Marié avec une Femme</option>
+                            <option value="4">Marié avec deux Femmes</option>
+                            <option value="5">Marié avec plud de deux Femmes</option>
+                            <option value="6">Séparé(e)</option>
+                            <option value="7">Divorcé(e)</option>
+                            <option value="8">Veuf(ve)</option>
                         </select>
                     </div>
                     <div data-role="fieldcontain">
                         <label for="marriage_type-${indice}">Type de mariage:</label>
                         <select name="marriage_type-${indice}" id="marriage_type-${indice}" class="marr_type" data-native-menu="false">
                             <option>Choisissez le type de mariage</option>
+                            <option value="1">Mariage Légal</option>
+                            <option value="2">Mariage Coutumier</option>
+                            <option value="3">Mariage Religieux</option>
+                            <option value="4">Mariage Légal et Coutumier</option>
+                            <option value="5">Mariage Légal et Religieux</option>
+                            <option value="6">Coutumier et Religieux</option>
+                            <option value="7">Coutumier, Religieux et Légal</option>
+                            <option value="8">Néant</option>
                         </select>
                     </div>
                     <p>
@@ -256,13 +281,29 @@ ResidentRecord.get_record_html = function(indice) {
                     <div data-role="fieldcontain">
                         <label for="occupation_status-${indice}">Status de l'emploi:</label>
                         <select name="occupation_status-${indice}" id="occupation_status-${indice}" data-native-menu="false">
-                            <option>Choisissez le status de l'emploi</option>
+                            <option value="">Choisissez le status de l'emploi</option>
+                            <option value="1">Occupé</option>
+                            <option value="2">Chômeur</option>
+                            <option value="3">En quête du premier emploi</option>
+                            <option value="4">Ménagère</option>
+                            <option value="5">Étudiant ou Élève</option>
+                            <option value="6">Retraité</option>
+                            <option value="7">Rentier</option>
+                            <option value="8">Autre inactif</option>
                         </select>
                     </div>
                     <div data-role="fieldcontain">
                         <label for="occupation_situation-${indice}">Situation de l'emploi:</label>
                         <select name="occupation_situation-${indice}" id="occupation_situation-${indice}" data-native-menu="false">
                             <option>Choisissez la situation de l'emploi</option>
+                            <option value="1">Employeur</option>
+                            <option value="2">Salarié du Public</option>
+                            <option value="3">Salarié du Privé</option>
+                            <option value="4">Travailleur à la Tâche</option>
+                            <option value="5">Coopérative</option>
+                            <option value="6">Indépendant</option>
+                            <option value="7">Aide Familiale</option>
+                            <option value="8">Apprenti</option>
                         </select>
                     </div>
                     <div data-role="fieldcontain">
@@ -273,12 +314,29 @@ ResidentRecord.get_record_html = function(indice) {
                         <label for="religion-${indice}">Religion:</label>
                         <select name="religion-${indice}" id="religion-${indice}" data-native-menu="false">
                             <option>Choisissez la religion</option>
+                            <option value="1">Catholique</option>
+                            <option value="2">Méthodiste</option>
+                            <option value="3">Protestant</option>
+                            <option value="4">Kimbanguiste</option>
+                            <option value="5">Réveil</option>
+                            <option value="6">Musulman</option>
+                            <option value="7">Autre</option>
+                            <option value="0">Sans Religion</option>
                         </select>
                     </div>
                     <div data-role="fieldcontain">
                         <label for="handicap-${indice}">Type de l'handicap:</label>
                         <select name="handicap-${indice}" id="handicap-${indice}" data-native-menu="false">
                             <option>Choisissez le type d'handicap</option>
+                            <option value="A">Sans Handicap</option>
+                            <option value="B">Sourd</option>
+                            <option value="C">Non Voyant</option>
+                            <option value="D">Muet</option>
+                            <option value="E">Sourd-Muet</option>
+                            <option value="F">Bègue</option>
+                            <option value="G">Albinos</option>
+                            <option value="H">Handicap des Membres Inférieurs</option>
+                            <option value="I">Handicap des Membres Supérieurs</option>
                         </select>
                     </div>
                     <p>
@@ -302,7 +360,7 @@ ResidentRecord.get_record_html = function(indice) {
             </div>`;
         return record_html;
 }
-
+/*
 ResidentRecord.get_head_household_link_choices = function(ind, request_url) {
     let send_request = false;
     local_head_household_links = localStorage.getItem("local_head_household_links");
@@ -783,7 +841,7 @@ ResidentRecord.get_handicap_choices = function (ind, request_url) {
                         console.log(data);
                         for (var i=0; i<data.length; i++) {
                             option_name = data[i].name;
-                            option_value = data[i].pk.toString();
+                            option_value = data[i].pk//.toString();
                             var handicap_obj = {option_name: option_name,
                                                 option_value: option_value};
                             handicap_arr[i] = handicap_obj;
@@ -813,4 +871,4 @@ ResidentRecord.get_handicap_choices = function (ind, request_url) {
         console.log(err.message);
         handicap = "";
     }
-};
+};*/
