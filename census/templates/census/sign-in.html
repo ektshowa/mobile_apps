@@ -84,12 +84,10 @@
 
 <script>
 
-$(document).ready(function () {
+$(document).on('pagecreate', '#login_page', function() {
 
-{% block domready %}
-
-    $("#btn-submit").click(function(e) {
-        alert("in login");
+    $("#btn-submit").on('click', function(e) {
+        console.log("in login");
         e.preventDefault();
         var form_data = $("form").serializeArray().reduce(
             function(obj, item) {
@@ -120,7 +118,7 @@ $(document).ready(function () {
         });
     });
 
-{% endblock %}
+
 
 });
 

@@ -25,11 +25,20 @@
                 </div>
                 <div role="main" class="ui-content">
                     <h2>Enregistrez le M&eacute;nage</h2>
+
+                    <!--<a href="#filler_choice_dialog" data-rel="popup" data-position-to="window" data-transition="pop" 
+                        class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">
+                            Qui cr&eacute;er l'enregistrement?
+                    </a>-->
+                    <a href = "#filler_choice_dialog" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">
+                        Qui cr&eacute;er l'enregistrement?
+                    </a>
+
                     <div data-role="fieldcontain">
                         <label for="census_agent_id">Num&eacute;ro de l'Agent Recenseur:</label>
                         <input type="text" name="census_agent_id" id="census_agent_id" value="" />
                     </div>
-                    <div data-role="fieldcontain">
+                    <!--<div data-role="fieldcontain">
                         <fieldset data-role="controlgroup">
                             <legend>
                                 Enregistrement cr&eacute;er par:
@@ -43,7 +52,7 @@
                                 Chef de M&eacute;nage
                             </label>
                         </fieldset>
-                    </div>
+                    </div>-->
                     <div data-role="fieldcontain">
                         <label for="household_id">Num&eacute;ro du m&eacute;nage:</label>
                         <input type="text" name="household_id" id="household_id" value="" />
@@ -179,6 +188,41 @@
                     <h4>Copyright Fonsdom &copy; 2020</h4>
                 </div>
             </div>
+            <div data-role="page" data-dialog="true" id="filler_choice_dialog" style="max-width:400px;">
+                <div data-role="header" data-theme="a">
+                    <h1>Qui enregistre?</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <!--<h3 class="ui-title">L'Agent Recenseur ou le Chef de M&eacute;nage?</h3>-->
+                    <h3>Choisissez l'un des deux</h3>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Agent Recenseur</a>
+                    <a href="#start_filling_info" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Chef de M&eacute;nage</a>
+                </div>
+            </div>
+            <div data-role="page" data-dialog="true" data-close-btn="none" id="start_filling_info">
+                <div data-role="header">
+                    G&eacute;n&eacute;rer le m&eacute;nage
+                </div>
+                <form>
+                    <div style="padding:10px 20px;">
+                        <h3>Remplissez le formulaire ci-dessous</h3>
+                        <label for="agent_num" class="ui-hidden-accessible">Num&eacute;ro de l'Agent:</label>
+                        <input type="text" name="agent_num" id="agent_num" value="" placeholder="Num&eacute;ro de l'Agent" data-theme="a">
+                        <label for="prenom_agent" class="ui-hidden-accessible">Pr&eacute;nom de l'Agent:</label>
+                        <input type="text" name="prenom_agent" id="prenom_agent" value="" placeholder="Prenom de l'Agent" data-theme="a">
+                        <label for="nom_agent" class="ui-hidden-accessible">Nom de l'Agent:</label>
+                        <input type="text" name="nom_agent" id="nom_agent" value="" placeholder="Nom de l'Agent" data-theme="a">
+                        <p>Ci-bas pour le Chef de M&eacute;nage</p>
+                        <label for="prenom_head" class="ui-hidden-accessible">Pr&eacute;nom:</label>
+                        <input type="text" name="prenom_head" id="prenom_head" value="" placeholder="Prenom" data-theme="a">
+                        <label for="nom_head" class="ui-hidden-accessible">Nom:</label>
+                        <input type="text" name="nom_head" id="nom_head" value="" placeholder="Nom" data-theme="a">
+                        <a href = "#household_rec" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">
+                            G&eacute;n&eacute;rer le m&eacute;nage 
+                        </a>
+                    </div>
+                </form>
+            </div>
             <div data-role="page" id="household_address" class="a-page">
                 <div data-role="header" data-theme="c">
                     <a href="#household_rec" data-icon="carat-l">Retour</a>
@@ -187,46 +231,52 @@
                 </div>
                 <div role="main" class="ui-content">
                     <h2>Ajoutez l'Adresse du M&eacute;nage</h2>
-                    <div data-role="fieldcontain">
-                        <label for="select_province_1">Province:</label>
-                        <select name="select_province_1" id="select_province_1" data-native-menu="false">
-                            <option>Choisissez la province</option>
-                            <option>un  cas </option>
-                            <option>deux  cas </option>
-                            <option>trois  cas </option>
-                        </select>
+                    <div class="ui-field-contain">
+                        <fieldset data-role="controlgroup"data-type="horizontal" >
+                            <!--<legend>&Eacute;quipe en zone Urbaine/Rurale?:</legend>-->
+                            <input type="radio" name="select_zone_type" class="zone_type" id="select_zone_type_urban" value="zone_type_urban" checked="checked" />
+                            <label for="select_zone_type_urban">Urbaine</label>
+                            <input type="radio" name="select_zone_type" class="zone_type" id="select_zone_type_rural" value="zone_type_rural" />
+                            <label for="select_zone_type_rural">Rurale</label>
+                        </fieldset>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" id="div_select_province">
                         <label for="select_province">Province:</label>
-                        <select name="select_province" id="select_province" data-native-menu="false">
+                        <select name="select_province" id="select_province" class="province_choice" data-native-menu="false">
                             <option>Choisissez la province</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" id="div_select_city">
                         <label for="select_city">Ville ou T&eacute;rritoire:</label>
-                        <select name="select_city" id="select_city" data-native-menu="false">
+                        <select name="select_city" id="select_city" class="city_choice" data-native-menu="false">
                             <option>Choisissez la ville ou t&eacute;rritoire</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" id="div_select_commune">
                         <label for="select_commune">Commune:</label>
                         <select name="select_commune" id="select_commune" data-native-menu="false">
                             <option>Choisissez la commune</option>
                         </select>
                     </div>
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" id="div_select_neighborhood">
                        <label for="neighborhood">Quartier:</label>
                        <input type="text" name="neighborhood" id="neighborhood" value="" />
                     </div>
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" id="div_select_street">
                         <label for="street">Avenue:</label>
                         <input type="text" name="street" id="street" value="" />
                      </div>
-                     <div data-role="fieldcontain">
+                     <div data-role="fieldcontain" id="div_select_house_num">
                         <label for="house_num">Num&eacute;ro:</label>
                         <input type="text" name="house_num" id="house_num" value="" />
                      </div>
-                     <p>
+                     <div data-role="fieldcontain" id="div_select_territory" class="bi-invisible">
+                        <label for="select_territory">Territoire:</label>
+                        <select name="select_territory" class="smallest_unit" id="select_territory" data-native-menu="false">
+                            <option>Choisissez le territoire</option>
+                        </select>
+                    </div>
+                    <p>
                          <div class="ui-grid-a">
                              <div class="ui-block-a">
                                  <a data-role="button" href="">
@@ -246,7 +296,7 @@
                     <h4>Copyright Fonsdom &copy; 2020</h4>
                 </div>
             </div>
-            <div data-role="page" id="household_resident" class="a-page resident_info">
+            <div data-role="page" id="household_resident" class="a-page resident_info more_resident_page">
                 <div data-role="header" data-theme="c">
                     <a href="#household_address" data-icon="carat-l">Retour</a>
                         <h1>R.D.C. Recensement</h1>
@@ -384,17 +434,17 @@
                                 <div class="ui-field-contain">
                                     <fieldset data-role="controlgroup"data-type="horizontal" >
                                         <!--<legend>&Eacute;quipe en zone Urbaine/Rurale?:</legend>-->
-                                        <input type="radio" name="zone_type" id="zone_type_urban" value="zone_type_urban" checked="checked" />
-                                        <label for="zone_type_urban">Urbaine</label>
-                                        <input type="radio" name="zone_type" id="zone_type_rural" value="zone_type_rural" />
-                                        <label for="zone_type_rural">Rurale</label>
+                                        <input type="radio" name="birth_zone_type" class="zone_type" id="birth_zone_type_urban" value="zone_type_urban" checked="checked" />
+                                        <label for="birth_zone_type_urban">Urbaine</label>
+                                        <input type="radio" name="birth_zone_type" class="zone_type" id="birth_zone_type_rural" value="zone_type_rural" />
+                                        <label for="birth_zone_type_rural">Rurale</label>
                                     </fieldset>
                                 </div>
                             </div>
                             <div class="ui-block-b">
                                 <fieldset data-role="controlgroup">
                                     <div id="div_birth_province">
-                                        <select name="birth_province" id="birth_province" data-native-menu="false">
+                                        <select name="birth_province" id="birth_province" class="province_choice" data-native-menu="false">
                                             <option>Choisissez la province</option>
                                         </select>
                                     </div>
@@ -404,7 +454,7 @@
                                         </select>
                                     </div>
                                     <div id="div_birth_city">
-                                        <select name="birth_city" id="birth_city" data-native-menu="false">
+                                        <select name="birth_city" id="birth_city"  class="city_choice" data-native-menu="false">
                                             <option>Choisissez la ville</option>
                                         </select>
                                     </div>
@@ -533,85 +583,108 @@
 </html>
 
 <script>
+var current_button_name = current_button_name || "";
 
-$(document).ready(function () {
-
-{% block domready %}
-
-$("input[name=zone_type]").click(function(e) {
-    var value = $("input[name=zone_type]:checked").val();
-
-    if (value == "zone_type_rural") {
-        console.log("CLICKED " + value);
-        $("#div_birth_city").addClass("bi-invisible");
-        $("#div_birth_commune").addClass("bi-invisible");
-        $("#div_birth_territory").removeClass("bi-invisible");
-    }
-    else if (value == "zone_type_urban") {
-        console.log("CLICKED " + value);
-        $("#div_birth_territory").addClass("bi-invisible");
-        $("#div_birth_city").removeClass("bi-invisible");
-        $("#div_birth_commune").removeClass("bi-invisible");
-    }
+$(document).on('pagecreate', '#household_address', function() {
+    CensusHouseholdRecord.get_provinces_choices("select_province", "{% url 'census_api:provinces' %}");
+    $(".province_choice").on('change',function(e) {
+        e.preventDefault();
+        if (e.handled !== true) {
+            console.log("IN ADDRESS PROVINCE CHANGE");
+            var that = $(this);
+            CensusHouseholdRecord.get_cities_choices(that, "{% url "census_api:cities" %}");
+            e.handled = true;
+        }    
+    });
+    $(".city_choice").on('change', function(e) {
+        e.preventDefault();
+        if (e.handled !== true) {
+            console.log("IN CITY ADDRESS CHANGE");
+            var that = $(this);
+            CensusHouseholdRecord.get_communes_choices(that, "{% url "census_api:communes" %}");
+            e.handled = true;
+        }
+    });
+    $('input[name=select_zone_type]').on("click", function(e) {
+        console.log("TEST CLICK SELECT");
+        var page_id = $(".ui-page-active").attr("id");
+        console.log("THIS PAGE ID " + page_id);
+        CensusHouseholdRecord.set_zone_type("select_zone_type");
+    });
 });
 
-$(document).on("click", "input[name=zone_type-1]", function(e) {
-    var value = $("input[name=zone_type-1]:checked").val();
-
-    if (value == "zone_type_rural") {
-        console.log("CLICKED " + value);
-        $("#div_birth_city").addClass("bi-invisible");
-        $("#div_birth_commune").addClass("bi-invisible");
-        $("#div_birth_territory").removeClass("bi-invisible");
+$(document).on('pagecreate', '.more_resident_page'/*'#household_resident'*/, function() {
+    CensusHouseholdRecord.get_provinces_choices("birth_province", "{% url 'census_api:provinces' %}");
+    $(".province_choice").on('change',function(e) {
+        e.preventDefault();
+        if (e.handled !== true) {
+            console.log("IN PROVINCE CHANGE");
+            var that = $(this);
+            CensusHouseholdRecord.get_cities_choices(that, "{% url "census_api:cities" %}");
+            e.handled = true;
+        }
+    });
+    $(".city_choice").on('change', function(e) {
+        e.preventDefault();
+        if (e.handled !== true) {
+            console.log("IN CITY CHANGE");
+            var that = $(this);
+            CensusHouseholdRecord.get_communes_choices(that, "{% url "census_api:communes" %}");
+            e.handled = true;
+        }
+    });
+    $(".zone_type").on('click', function(e) {
+        console.log("BIRTH ZONE CLICKED");
+        try {
+            var page_id = $(".ui-page-active").attr("id");
+            console.log("ACTIVE PAGE ID " + page_id);
+            var page_id_parts = page_id.split("-");
+            if (page_id_parts.length > 1) {
+                var index = page_id_parts[page_id_parts.length - 1];
+            }
+            else {
+                var index = "";
+            }
+            console.log("VAR INDEX " + index);
+            if (page_id_parts[0] == "household_resident") {
+                var clicked_id = "birth_zone_type";
+                if (index) {
+                    var clicked_name = clicked_id + "-" + index;
+                }
+                else {
+                    var clicked_name = clicked_id;
+                }
+            }
+            else {
+                var clicked_name = "";
+            }
+            console.log("CLICKED NAME " + clicked_name);
+            CensusHouseholdRecord.set_zone_type(clicked_name);        
+        }
+        catch (err) {
+            console.log(err.message);
+        }
+    });
+    /*
+    var page_id = $(".ui-page-active").attr("id");
+    var page_id_parts = page_id.split("-");
+    if (page_id_parts.length > 1) {
+        var index = page_id_parts[page_id_parts.length - 1];
     }
-    else if (value == "zone_type_urban") {
-        console.log("CLICKED " + value);
-        $("#div_birth_territory").addClass("bi-invisible");
-        $("#div_birth_city").removeClass("bi-invisible");
-        $("#div_birth_commune").removeClass("bi-invisible");
+    else {
+        var index = "";
     }
+    if (page_id_parts[0] == "household_resident") {
+        var clicked_id = "#birth_zone_type";
+        clicked_name = clicked_name + "-" + index;
+    }
+    //current_button_name = clicked_name;
+    CensusHouseholdRecord.set_zone_type(clicked_name);*/
 });
 
-$(document).on("click", "input[name=zone_type-2]", function(e) {
-    var value = $("input[name=zone_type-2]:checked").val();
-
-    if (value == "zone_type_rural") {
-        console.log("CLICKED " + value);
-        $("#div_birth_city").addClass("bi-invisible");
-        $("#div_birth_commune").addClass("bi-invisible");
-        $("#div_birth_territory").removeClass("bi-invisible");
-    }
-    else if (value == "zone_type_urban") {
-        console.log("CLICKED " + value);
-        $("#div_birth_territory").addClass("bi-invisible");
-        $("#div_birth_city").removeClass("bi-invisible");
-        $("#div_birth_commune").removeClass("bi-invisible");
-    }
-});
-
-
-
-CensusHouseholdRecord.get_provinces_choices("select_province", "{% url 'census_api:provinces' %}");
-
-CensusHouseholdRecord.get_provinces_choices("birth_province", "{% url 'census_api:provinces' %}");
-
-//ResidentRecord.get_head_household_link_choices("", "{% url 'census_api:head_household_links' %}");
-
-//ResidentRecord.get_marrital_status_choices("", "{% url 'census_api:marrital_status_codes' %}");
-
-//ResidentRecord.get_marrital_type_choices("", "{% url 'census_api:marriage_type_codes' %}");
-
-// ResidentRecord.get_highest_diploma_choices("");
-
-//ResidentRecord.get_occupation_status_choices("", "{% url 'census_api:occup_status_codes' %}");
-
-//ResidentRecord.get_occupation_situation_choices("", "{% url 'census_api:occup_situation_codes' %}");
-
-//ResidentRecord.get_religion_choices("", "{% url 'census_api:religion_codes' %}");
-
-//ResidentRecord.get_handicap_choices(""); 
-
-$(document).on("click", ".more_resident", function(ev) {
+$(document).on('pagecreate', '.more_resident_page', function() {
+    
+    $(document).on("click", ".more_resident", function(ev) {
         ev.preventDefault();
         console.log("IN NEW RESIDENT INFO");
         var resident_list = $("form").find(".resident_info");
@@ -623,22 +696,63 @@ $(document).on("click", ".more_resident", function(ev) {
         //console.log(res_html);
         $("form").append(res_html);
         $.mobile.navigate("#household_resident-"+ind);
-        /* if (parseInt(ind) > 1) {
+         if (parseInt(ind) > 1) {
             console.log("CREATE HOUSEHOLD OPTIONS " + ind);
-            ResidentRecord.get_head_household_link_choices(ind);
+            CensusHouseholdRecord.get_provinces_choices("birth_province", "{% url 'census_api:provinces' %}", ind);
+            console.log("CHECK FOR GETTING PROVINCES");
+        /*  ResidentRecord.get_head_household_link_choices(ind);
             ResidentRecord.get_marrital_status_choices(ind);
             ResidentRecord.get_marrital_type_choices(ind);
             ResidentRecord.get_highest_diploma_choices(ind);
             ResidentRecord.get_occupation_status_choices(ind);
             ResidentRecord.get_occupation_situation_choices(ind);
             ResidentRecord.get_religion_choices(ind);
-            ResidentRecord.get_handicap_choices(ind);
-        }*/
+            ResidentRecord.get_handicap_choices(ind); */
+        }
+    });
 });
 
-
-{% endblock %}
-
+/*
+$(document).on('pagebeforeshow', function() { 
+    var page_id = $.mobile.activePage.attr('id');
+    console.log("THIS PAGE ID " + page_id);
+    var page_id_parts = page_id.split("-");
+    if (page_id_parts.length > 1) {
+        var index = page_id_parts[page_id_parts.length - 1];
+    }
+    else {
+        var index = "";
+    }
+    //var id_prefix = this_id_parts[0].split("_");
+    if (page_id_parts[0] == "household_address") {
+        var clicked_name = "#select_zone_type";
+    }
+    else if (page_id_parts[0] == "household_resident") {
+        var clicked_id = "#birth_zone_type";
+        clicked_name = clicked_name + "-" + index;
+    }
+    current_button_name = clicked_name;
+    console.log("CLICKED ON SHOW " + current_button_name);
+        
 });
+*/
+
+$(document).on('pagecreate', function() {
+    //console.log("CLICKED ID " + current_button_name);
+    //var the_input = 'input:radio';
+    $(document).on("click", 'input[name=select_zone_type]', function(e) {
+        console.log("ZONE CLICKED " + $(this).attr("id"));
+        e.preventDefault();
+        if (e.handled !== true) {
+            console.log("FOR ZONE TYPE");
+            //CensusHouseholdRecord.set_zone_type(current_button_name);
+            e.handled = true;
+        }
+    });/*
+    $(document).on("click", "#select_province", function(e) {
+        console.log("TEST CLICK SELECT");
+    });*/
+}); 
+
 
 </script>

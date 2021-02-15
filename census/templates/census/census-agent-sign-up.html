@@ -276,7 +276,7 @@ $(document).ready(function() {
             var el_select = $(this).attr("id");
             var id_parts = el_select.split("_");
             var el_city_id = "#" + id_parts[0] + "_" + "city";
-            $("option", el_select).not(':eq(0)').remove();
+            $("option", el_city_id).not(':eq(0)').remove();
             var province_id = $(this).find(":selected").val();
             $.get("{% url "census:load_cities_of_province" %}",
                 { province_id: province_id },

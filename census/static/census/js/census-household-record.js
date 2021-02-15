@@ -1,14 +1,20 @@
 var CensusHouseholdRecord = CensusHouseholdRecord || {};
 
-CensusHouseholdRecord.get_provinces_choices = function(select_id, provinces_url) {
+CensusHouseholdRecord.get_provinces_choices = function(select_id, provinces_url, index="") {
     let send_request = false;
     var local_province = localStorage.getItem("local_province");
     if (local_province === null) {
         send_request = true;
     }
     let province = "";
-    var el_selector = "#" + select_id;
-
+    if (index) {
+        var el_selector = "#" + select_id + "-" + index;
+    }
+    else {
+        var el_selector = "#" + select_id;
+    }
+    console.log("EL SELECTOR " + el_selector);
+    
     try {
         if (!send_request) {
             province = JSON.parse(local_province);
@@ -16,6 +22,7 @@ CensusHouseholdRecord.get_provinces_choices = function(select_id, provinces_url)
             if (province.local_province === undefined ||
                         province["local_province"].length < 1) {
                 send_request = true;
+                
             }
         }
         if (send_request) {
@@ -23,7 +30,7 @@ CensusHouseholdRecord.get_provinces_choices = function(select_id, provinces_url)
             $.get(provinces_url,
                 function(data) {
                     if (data) {
-                        console.log("PROVINCE SUCCESS");
+                        console.log("PROVINCE SUCCESS index " + index);
                         console.log(data);
                         for (var i=0; i<data.length; i++) {
                             option_name = data[i].name;
@@ -46,11 +53,12 @@ CensusHouseholdRecord.get_provinces_choices = function(select_id, provinces_url)
         }
         else {
             province = province["local_province"];
+            console.log("NOT SEND REQUEST " );
             for (var i=0; i<province.length; i++) {
                 console.log("PROVINCE EXISTS HERE");
                 var option_name = province[i].option_name;
                 var option_value = province[i].option_value;
-                $("<option/>").attr("value", option_value).text(option_name).appendTo(el_selector);
+                $("<option/>").attr("value", option_value).text(option_name).appendTo(el_selector);    
             }
             $(el_selector).selectmenu();
             $(el_selector).selectmenu("refresh", true);
@@ -62,6 +70,139 @@ CensusHouseholdRecord.get_provinces_choices = function(select_id, provinces_url)
     }
 };
 
+CensusHouseholdRecord.get_cities_choices = function(this_el, census_api_cities_url) {
+    var el_select = this_el.attr("id");
+    console.log("SELECT ID " + el_select);
+    var id_parts = el_select.split("-");
+    if (id_parts.length > 1) {
+        var index = id_parts[id_parts.length - 1];
+    }
+    else {
+        var index = "";
+    }
+    var id_prefix = id_parts[0].split("_");
+    if (id_prefix[0] == "select") {
+        var el_city_id = "#select_city";        
+    }
+    else if (id_prefix[0] == "birth") {
+        var el_city_id = "#birth_city";
+    }
+    if (index) {
+        el_city_id = el_city_id + "-" + index;
+    }
+    console.log("CITY ID " + el_city_id);
+    $("option", el_city_id).not(':eq(0)').remove();
+    var province_id = this_el.find(":selected").val();
+    $.get(census_api_cities_url,
+        { province_id: province_id },
+        function(data) {
+            console.log(data);
+            for (var i=0; i<data.length; i++) {
+                option_name = data[i].name;
+                option_value = data[i].pk.toString();
+                $("<option/>").attr("value", option_value).text(option_name).appendTo(el_city_id);
+            }
+            $(el_city_id).selectmenu();
+            $(el_city_id).selectmenu('refresh', true);
+        });
+
+};
+
+CensusHouseholdRecord.get_communes_choices = function(this_el, census_api_communes_url) {
+   var el_select = this_el.attr("id");
+   console.log("SELECT ID " + el_select);
+   var id_parts = el_select.split("-");
+   if (id_parts.length > 1) {
+       var index = id_parts[id_parts.length - 1];
+   }
+   else {
+       var index = "";
+   }
+   var id_prefix = id_parts[0].split("_");
+   if (id_prefix[0] == "select") {
+       var el_commune_id = "#select_commune";
+   }
+   else if (id_prefix[0] == "birth") {
+       var el_commune_id = "#birth_commune";
+   }
+   if (index) {
+       el_commune_id = el_commune_id + "-" + index;     
+   }
+   console.log("COMMUNE ID " + el_commune_id);
+   $("option", el_commune_id).not(':eq(0)').remove();
+   var city_id = this_el.find(":selected").val();
+   $.get(census_api_communes_url,
+        { city_id: city_id },
+        function(data) {
+            console.log(data);
+            for (var i=0; i<data.length; i++) {
+                option_name = data[i].name;
+                option_value = data[i].pk.toString();
+                $("<option/>").attr("value", option_value).text(option_name).appendTo(el_commune_id);
+            }
+            $(el_commune_id).selectmenu();
+            $(el_commune_id).selectmenu('refresh', true);
+        });    
+};
+
+CensusHouseholdRecord.set_zone_type = function(radio_name) {
+    console.log("ZONE TYPE NAME " + radio_name);
+    var name_parts = radio_name.split("-");
+    if (name_parts.length > 1) {
+        var index = name_parts[name_parts.length - 1];
+    }
+    else {
+        var index = "";
+    }
+    console.log("ZONE INDEX " + index);
+    var name_prefix = name_parts[0].split("_");
+    if (name_prefix[0] == "select") {
+        var div_city_id = "#div_select_city";
+        var div_commune_id = "#div_select_commune";
+        var div_territory_id = "#div_select_territory";
+        var div_neighborhood_id = "#div_select_neighborhood";
+        var div_street_id = "#div_select_street";
+        var div_house_num_id = "#div_select_house_num";
+    }
+    else if (name_prefix[0] == "birth") {
+        var div_city_id = "#div_birth_city";
+        var div_commune_id = "#div_birth_commune";
+        var div_territory_id = "#div_birth_territory";
+    }
+    if (index) {
+        div_city_id = div_city_id + "-" + index;
+        div_commune_id = div_commune_id + "-" + index;
+        div_territory_id = div_territory_id + "-" + index;
+    }
+    console.log("DIV IDS CITY ID " + div_city_id + " COMMUNE_ID " + div_commune_id + " TERRITORY ID " + div_territory_id);
+    var input_selector = "input[name=" + radio_name + "]:checked";
+    var value = $(input_selector).val();
+    console.log("ZONE INPUT VALUE " + value);
+    if (value == "zone_type_rural") {
+        console.log("ZONE TYPE " + value);
+        $(div_city_id).addClass("bi-invisible");
+        $(div_commune_id).addClass("bi-invisible");
+        $(div_territory_id).removeClass("bi-invisible");
+        if (name_prefix[0] == "select") {
+            $(div_neighborhood_id).addClass("bi-invisible");
+            $(div_street_id).addClass("bi-invisible");
+            $(div_neighborhood_id).addClass("bi-invisible");
+            $(div_house_num_id).addClass("bi-invisible");
+        }
+    }
+    else if (value == "zone_type_urban") {
+        console.log("CLICKED " + value);
+        $(div_territory_id).addClass("bi-invisible");
+        $(div_city_id).removeClass("bi-invisible");
+        $(div_commune_id).removeClass("bi-invisible");
+        if (name_prefix[0] == "select") {
+            $(div_neighborhood_id).removeClass("bi-invisible");
+            $(div_street_id).removeClass("bi-invisible");
+            $(div_neighborhood_id).removeClass("bi-invisible");
+            $(div_house_num_id).removeClass("bi-invisible");
+        }
+    }
+};
 
 var ResidentRecord = ResidentRecord || {};
 
@@ -95,13 +236,16 @@ var index = 1;
 
 ResidentRecord.get_record_html = function(indice) {
         if (indice > 2) {
-            var retour_id = "household_resident-${indice-1}";
+            var retour_id = `#household_resident-${indice-1}`;
+        }
+        else if (indice == 2) {
+            var retour_id = "#household_resident";
         }
         else if (indice == 1) {
             var retour_id = "#household_address";
         }
         var record_html = `
-            <div data-role="page" id="household_resident-${indice}" class="a-page resident_info">
+            <div data-role="page" id="household_resident-${indice}" class="a-page resident_info more_resident_page">
                 <div data-role="header" data-theme="c">
                     <a href="${retour_id}" data-icon="carat-l">Retour</a>
                         <h1>R.D.C. Recensement</h1>
@@ -239,17 +383,17 @@ ResidentRecord.get_record_html = function(indice) {
                             <div class="ui-block-a">
                                 <div data-role="fieldcontain">
                                     <fieldset data-role="controlgroup"data-type="horizontal" >
-                                        <input type="radio" name="zone_type-${indice}" id="zone_type_urban-${indice}" value="zone_type_urban" checked="checked" />
-                                        <label for="zone_type_urban-${indice}">Urbaine</label>
-                                        <input type="radio" name="zone_type-${indice}" id="zone_type_rural-${indice}" value="zone_type_rural" />
-                                        <label for="zone_type_rural-${indice}">Rurale</label>
+                                        <input type="radio" name="birth_zone_type-${indice}" class="zone_type" id="birth_zone_type_urban-${indice}" value="zone_type_urban" checked="checked" />
+                                        <label for="birth_zone_type_urban-${indice}">Urbaine</label>
+                                        <input type="radio" name="birth_zone_type-${indice}" class="zone_type" id="birth_zone_type_rural-${indice}" value="zone_type_rural" />
+                                        <label for="birth_zone_type_rural-${indice}">Rurale</label>
                                     </fieldset>
                                 </div>
                             </div>
                             <div class="ui-block-b">
                                 <fieldset data-role="controlgroup">
                                     <div id="div_birth_province-${indice}">
-                                        <select name="birth_province-${indice}" id="birth_province-${indice}" data-native-menu="false">
+                                        <select name="birth_province-${indice}" class="province_choice" id="birth_province-${indice}" data-native-menu="false">
                                             <option>Choisissez la province</option>
                                         </select>
                                     </div>
@@ -259,7 +403,7 @@ ResidentRecord.get_record_html = function(indice) {
                                         </select>
                                     </div>
                                     <div id="div_birth_city-${indice}">
-                                        <select name="birth_city-${indice}" id="birth_city-${indice}" data-native-menu="false">
+                                        <select name="birth_city-${indice}" id="birth_city-${indice}" class="city_choice" data-native-menu="false">
                                             <option>Choisissez la ville</option>
                                         </select>
                                     </div>

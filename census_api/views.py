@@ -83,6 +83,8 @@ class CityListAPIView(ListAPIView):
 
         try:
             queryset = self.get_queryset().filter(province=province)
+            print("IN CITIES QUERYSET")
+            print(queryset)
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
@@ -106,12 +108,15 @@ class CommuneListAPIView(ListAPIView):
             traceback.print_exception(exc_type, exc_value, exc_traceback)
         try:
             queryset = self.get_queryset().filter(city=city)
+            print("IN COMMUNES QUERYSET")
+            print(queryset)
         except Exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
 
         serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data,
+                                headers={"Access-Control-Allow-Origin":"*"})
 
 
 class ResidentialSituationCodeListAPIView(ListAPIView):
