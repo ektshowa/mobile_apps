@@ -188,41 +188,7 @@
                     <h4>Copyright Fonsdom &copy; 2020</h4>
                 </div>
             </div>
-            <div data-role="page" data-dialog="true" id="filler_choice_dialog" style="max-width:400px;">
-                <div data-role="header" data-theme="a">
-                    <h1>Qui enregistre?</h1>
-                </div>
-                <div role="main" class="ui-content">
-                    <!--<h3 class="ui-title">L'Agent Recenseur ou le Chef de M&eacute;nage?</h3>-->
-                    <h3>Choisissez l'un des deux</h3>
-                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Agent Recenseur</a>
-                    <a href="#start_filling_info" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Chef de M&eacute;nage</a>
-                </div>
-            </div>
-            <div data-role="page" data-dialog="true" data-close-btn="none" id="start_filling_info">
-                <div data-role="header">
-                    G&eacute;n&eacute;rer le m&eacute;nage
-                </div>
-                <form>
-                    <div style="padding:10px 20px;">
-                        <h3>Remplissez le formulaire ci-dessous</h3>
-                        <label for="agent_num" class="ui-hidden-accessible">Num&eacute;ro de l'Agent:</label>
-                        <input type="text" name="agent_num" id="agent_num" value="" placeholder="Num&eacute;ro de l'Agent" data-theme="a">
-                        <label for="prenom_agent" class="ui-hidden-accessible">Pr&eacute;nom de l'Agent:</label>
-                        <input type="text" name="prenom_agent" id="prenom_agent" value="" placeholder="Prenom de l'Agent" data-theme="a">
-                        <label for="nom_agent" class="ui-hidden-accessible">Nom de l'Agent:</label>
-                        <input type="text" name="nom_agent" id="nom_agent" value="" placeholder="Nom de l'Agent" data-theme="a">
-                        <p>Ci-bas pour le Chef de M&eacute;nage</p>
-                        <label for="prenom_head" class="ui-hidden-accessible">Pr&eacute;nom:</label>
-                        <input type="text" name="prenom_head" id="prenom_head" value="" placeholder="Prenom" data-theme="a">
-                        <label for="nom_head" class="ui-hidden-accessible">Nom:</label>
-                        <input type="text" name="nom_head" id="nom_head" value="" placeholder="Nom" data-theme="a">
-                        <a href = "#household_rec" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">
-                            G&eacute;n&eacute;rer le m&eacute;nage 
-                        </a>
-                    </div>
-                </form>
-            </div>
+            
             <div data-role="page" id="household_address" class="a-page">
                 <div data-role="header" data-theme="c">
                     <a href="#household_rec" data-icon="carat-l">Retour</a>
@@ -577,6 +543,41 @@
                 <div data-role="footer">
                     <h4>Copyright Fonsdom &copy; 2020</h4>
                 </div>
+            </div>
+            <div data-role="page" data-dialog="true" id="filler_choice_dialog" style="max-width:400px;">
+                <div data-role="header" data-theme="a">
+                    <h1>Qui enregistre?</h1>
+                </div>
+                <div role="main" class="ui-content">
+                    <!--<h3 class="ui-title">L'Agent Recenseur ou le Chef de M&eacute;nage?</h3>-->
+                    <h3>Choisissez l'un des deux</h3>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Agent Recenseur</a>
+                    <a href="#start_filling_info" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Chef de M&eacute;nage</a>
+                </div>
+            </div>
+            <div data-role="page" data-dialog="true" data-close-btn="none" id="start_filling_info">
+                <div data-role="header">
+                    G&eacute;n&eacute;rer le m&eacute;nage
+                </div>
+                <form>
+                    <div style="padding:10px 20px;">
+                        <h3>Remplissez le formulaire ci-dessous</h3>
+                        <label for="agent_num" class="ui-hidden-accessible">Num&eacute;ro de l'Agent:</label>
+                        <input type="text" name="agent_num" id="agent_num" value="" placeholder="Num&eacute;ro de l'Agent" data-theme="a">
+                        <label for="prenom_agent" class="ui-hidden-accessible">Pr&eacute;nom de l'Agent:</label>
+                        <input type="text" name="prenom_agent" id="prenom_agent" value="" placeholder="Prenom de l'Agent" data-theme="a">
+                        <label for="nom_agent" class="ui-hidden-accessible">Nom de l'Agent:</label>
+                        <input type="text" name="nom_agent" id="nom_agent" value="" placeholder="Nom de l'Agent" data-theme="a">
+                        <p>Ci-bas pour le Chef de M&eacute;nage</p>
+                        <label for="prenom_head" class="ui-hidden-accessible">Pr&eacute;nom:</label>
+                        <input type="text" name="prenom_head" id="prenom_head" value="" placeholder="Prenom" data-theme="a">
+                        <label for="nom_head" class="ui-hidden-accessible">Nom:</label>
+                        <input type="text" name="nom_head" id="nom_head" value="" placeholder="Nom" data-theme="a">
+                        <a href = "#household_rec" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">
+                            G&eacute;n&eacute;rer le m&eacute;nage 
+                        </a>
+                    </div>
+                </form>
             </div>
         </form>
     </body>
